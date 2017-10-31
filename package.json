@@ -1,0 +1,19 @@
+{
+  "name": "layer-mask",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/layer-mask.js",
+  "scripts": {
+    "build": "rm -rf dist && ./node_modules/.bin/webpack",
+    "serve": "rm -rf dist && ./node_modules/.bin/webpack --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "lodash": "^4.17.4",
+    "webpack": "^2.6.1",
+    "raw-loader": "^0.5.1"
+  }
+}
