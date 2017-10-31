@@ -15,5 +15,8 @@
     "lodash": "^4.17.4",
     "webpack": "^2.6.1",
     "raw-loader": "^0.5.1"
+  },
+  "peerDependencies": {
+    "jquery": "^1.7"
   }
 }
