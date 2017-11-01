@@ -1,12 +1,27 @@
 {
   "name": "layer-mask",
   "version": "0.1.0",
-  "description": "",
-  "main": "dist/layer-mask.js",
+  "description": "Mask elements on the page",
+  "license": "MIT",
+  "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && ./node_modules/.bin/webpack",
     "serve": "rm -rf dist && ./node_modules/.bin/webpack --watch"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cawabunga/layer-mask.git"
+  },
+  "keywords": [
+    "angular",
+    "scope",
+    "validators"
+  ],
+  "author": "Emil Ibatullin",
+  "bugs": {
+    "url": "https://github.com/cawabunga/layer-mask/issues"
+  },
+  "homepage": "https://github.com/cawabunga/layer-mask#readme",
   "dependencies": {
     "jquery": "3.2.1",
     "svg.js": "2.6.3",
