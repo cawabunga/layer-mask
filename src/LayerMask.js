@@ -1,14 +1,22 @@
 const SVG = require('svg.js');
+const _ = require('underscore');
 const utils = require('./utils');
+const { Point, Vector } = require('./dataTypes');
 
 /**
  * @typedef {Object} LayerMaskConfig
  *
+ * @property {boolean} [debug]
  * @property {number} [padding]
  * @property {string} [classes]
  * @property {string} [classesCanvas]
  * @property {string} [classesSvg]
  * @property {string} [classesFixed]
+ * @property {string} [classesTable]
+ * @property {string} [classesTableRow]
+ * @property {string} [classesTableCell]
+ * @property {string} [classesTableCellHole]
+ * @property {string} [classesDebug]
  */
 
 class LayerMask {
@@ -19,8 +27,14 @@ class LayerMask {
      */
     static get defaults() {
         return {
+            debug: false,
             padding: 0,
             classes: 'layer-mask',
+            classesDebug: 'layer-mask--debug',
+            classesTable: 'layer-mask-table',
+            classesTableRow: 'layer-mask-table__row',
+            classesTableCell: 'layer-mask-table__cell',
+            classesTableCellHole: 'layer-mask-table__cell--hole',
             classesCanvas: 'layer-mask--canvas',
             classesSvg: 'layer-mask--svg',
             classesFixed: 'layer-mask--fixed',
@@ -32,7 +46,7 @@ class LayerMask {
      * @param {LayerMaskConfig} config
      */
     constructor(elements, config) {
-        this.config = Object.assign({}, config, this.constructor.defaults);
+        this.config = Object.assign({}, this.constructor.defaults, config);
         this.elements = elements.length ? [].slice.call(elements) : [elements];
     }
 
@@ -48,7 +62,7 @@ class LayerMask {
             .map(rect => utils.addPadding(rect, this.config.padding))
             .map(rect => utils.addPageOffset(rect, isFixed));
 
-        return this.createPathSvgMask(canvasDimension, isFixed, rectangles);
+        return this.createTableMask(canvasDimension, isFixed, rectangles);
     }
 
 
@@ -135,6 +149,90 @@ class LayerMask {
         return draw.node;
     }
 
+
+    /**
+     * @private
+     * @param {Dimension} canvasDimension
+     * @param {Boolean} isFixed
+     * @param {Array.<ClientRect>} rectangles
+     * @return {Element}
+     */
+    createTableMask(canvasDimension, isFixed, rectangles) {
+
+        const rowPositions = _.chain(rectangles)
+            .reduce((memo, r) => {
+                return memo.concat([r.top, r.top + r.height]);
+            }, [0])
+            .uniq()
+            .sort((a, b) => a - b)
+            .value();
+
+        const colPositions = _.chain(rectangles)
+            .reduce((memo, r) => {
+                return memo.concat([r.left, r.left + r.width]);
+            }, [0])
+            .uniq()
+            .sort((a, b) => a - b)
+            .value();
+
+        const container = document.createElement('div');
+        if (this.config.debug) {
+            container.classList.add(this.config.classesDebug);
+        }
+
+
+        addChildren(container, rowPositions.length, 'div', (row, i) => {
+            const rowInitial = rowPositions[i];
+            const rowTerminal = rowPositions[i + 1];
+
+            row.classList.add(this.config.classesTableRow);
+            if (rowTerminal) {
+                row.style.height = px(rowTerminal - rowInitial);
+            }
+
+            addChildren(row, colPositions.length, 'div', (cell, j) => {
+                const colInitial = colPositions[j];
+                const colTerminal = colPositions[j + 1];
+
+                cell.classList.add(this.config.classesTableCell);
+                if (colTerminal) {
+                    cell.style.width = px(colTerminal - colInitial);
+                }
+
+                if (rowTerminal !== undefined && colTerminal !== undefined) {
+                    const initialPoint = new Point(colInitial, rowInitial);
+                    const terminalPoint = new Point(colTerminal, rowTerminal);
+                    const vector = new Vector(initialPoint, terminalPoint);
+
+                    if (utils.isVectorCollides(rectangles, vector)) {
+                        cell.classList.add(this.config.classesTableCellHole);
+                    }
+                }
+            });
+        });
+
+        container.classList.add(this.config.classes, this.config.classesTable);
+        if (isFixed) {
+            container.classList.add(this.config.classesFixed);
+        }
+
+        return container;
+    }
+
+}
+
+function px(value) {
+    return `${value}px`;
+}
+
+function addChildren(container, count, tagName = 'div', cb = undefined) {
+    _.times(count, (i) => {
+        const child = document.createElement(tagName);
+        container.appendChild(child);
+        if (cb) {
+            cb(child, i);
+        }
+    });
 }
 
 module.exports = LayerMask;

@@ -19,6 +19,7 @@
     "raw-loader": "^0.5.1"
   },
   "peerDependencies": {
-    "jquery": "^1.7"
+    "jquery": "^1.7",
+    "underscore": "*"
   }
 }

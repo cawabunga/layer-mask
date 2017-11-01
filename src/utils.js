@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const { ClientRect } = require('./dataTypes');
 
 module.exports = {
     getPageDimensions,
@@ -7,18 +8,8 @@ module.exports = {
     getAllBoundaries,
     addPadding,
     addPageOffset,
+    isVectorCollides,
 };
-
-/**
- * @typedef {Object} ClientRect
- *
- * @property {number} left
- * @property {number} right
- * @property {number} top
- * @property {number} bottom
- * @property {number} width
- * @property {number} height
- */
 
 /**
  * @typedef {Object} Dimension
@@ -103,7 +94,7 @@ function getSingularBoundary(elements) {
     const width = right - left;
     const height = bottom - top;
 
-    return clientRectFactory(left, right, top, bottom, width, height);
+    return new ClientRect(left, right, top, bottom, width, height);
 }
 
 /**
@@ -129,7 +120,7 @@ function addPadding(rectangular, padding) {
     const width = rectangular.width + 2 * padding;
     const height = rectangular.height + 2 * padding;
 
-    return clientRectFactory(left, right, top, bottom, width, height);
+    return new ClientRect(left, right, top, bottom, width, height);
 }
 
 /**
@@ -147,25 +138,31 @@ function addPageOffset(rectangular, isFixed) {
     const width = rectangular.width;
     const height = rectangular.height;
 
-    return clientRectFactory(left, right, top, bottom, width, height);
+    return new ClientRect(left, right, top, bottom, width, height);
 }
 
 /**
- * @param {number} left
- * @param {number} right
- * @param {number} top
- * @param {number} bottom
- * @param {number} width
- * @param {number} height
- * @return {ClientRect}
+ * @param {Array.<ClientRect>} rectangles
+ * @param {Point} point
+ * @return {boolean}
  */
-function clientRectFactory(left, right, top, bottom, width, height) {
-    return {
-        left,
-        right,
-        top,
-        bottom,
-        width,
-        height
-    };
+function isPointCollides(rectangles, point) {
+    return rectangles.reduce((memo, rectangle) => {
+        const left = rectangle.left;
+        const right = rectangle.left + rectangle.width;
+        const top = rectangle.top;
+        const bottom = rectangle.top + rectangle.height;
+        return memo || (left <= point.x && point.x <= right && top <= point.y && point.y <= bottom);
+    }, false);
+}
+
+/**
+ * @param {Array.<ClientRect>} rectangles
+ * @param {Vector} vector
+ * @return {boolean}
+ */
+function isVectorCollides(rectangles, vector) {
+    return isPointCollides(rectangles, vector.initial)
+        && isPointCollides(rectangles, vector.terminal)
+        && isPointCollides(rectangles, vector.getMiddlePoint());
 }

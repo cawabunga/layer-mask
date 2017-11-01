@@ -15,3 +15,36 @@
     opacity: .5;
     pointer-events: painted;
 }
+
+.layer-mask-table {
+    display: flex;
+    flex-direction: column;
+}
+.layer-mask-table__row,
+.layer-mask-table__cell {
+    display: flex;
+    flex: 0 0 auto;
+}
+.layer-mask-table__row:last-child,
+.layer-mask-table__cell:last-child {
+    flex: 1 0 auto;
+}
+
+.layer-mask-table,
+.layer-mask-table,
+.layer-mask-table__cell {
+    pointer-events: none;
+}
+.layer-mask-table__cell {
+    pointer-events: auto;
+}
+.layer-mask-table__cell--hole {
+    pointer-events: none;
+}
+
+.layer-mask--debug .layer-mask-table__cell {
+    background: rgba(221, 196, 9, 0.5);
+}
+.layer-mask--debug .layer-mask-table__cell--hole {
+    background: none;
+}

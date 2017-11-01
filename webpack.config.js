@@ -20,7 +20,8 @@ module.exports = {
       commonjs2: 'jquery',
       amd: 'jquery',
       root: 'jQuery',
-    }
+    },
+    underscore: '_',
   }],
   module: {
     loaders: [
