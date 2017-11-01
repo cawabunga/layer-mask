@@ -1,1 +1,1 @@
-module.exports = require('./src/layer-mask');
+module.exports = require('./src');

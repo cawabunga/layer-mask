@@ -8,7 +8,6 @@ module.exports = {
     getAllBoundaries,
     addPadding,
     addPageOffset,
-    isVectorCollides,
 };
 
 /**
@@ -139,30 +138,4 @@ function addPageOffset(rectangular, isFixed) {
     const height = rectangular.height;
 
     return new ClientRect(left, right, top, bottom, width, height);
-}
-
-/**
- * @param {Array.<ClientRect>} rectangles
- * @param {Point} point
- * @return {boolean}
- */
-function isPointCollides(rectangles, point) {
-    return rectangles.reduce((memo, rectangle) => {
-        const left = rectangle.left;
-        const right = rectangle.left + rectangle.width;
-        const top = rectangle.top;
-        const bottom = rectangle.top + rectangle.height;
-        return memo || (left <= point.x && point.x <= right && top <= point.y && point.y <= bottom);
-    }, false);
-}
-
-/**
- * @param {Array.<ClientRect>} rectangles
- * @param {Vector} vector
- * @return {boolean}
- */
-function isVectorCollides(rectangles, vector) {
-    return isPointCollides(rectangles, vector.initial)
-        && isPointCollides(rectangles, vector.terminal)
-        && isPointCollides(rectangles, vector.getMiddlePoint());
 }
