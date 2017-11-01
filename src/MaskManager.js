@@ -11,6 +11,7 @@ class MaskManager {
     }
 
     /**
+     * @public
      * @param {NodeList|Element} elements
      * @param {LayerMaskConfig} layerMaskConfig
      * @return {Element}
@@ -28,7 +29,7 @@ class MaskManager {
     }
 
     /**
-     * @private
+     * @public
      */
     hideActiveMask() {
         this.activeMask.remove();
