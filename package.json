@@ -5,18 +5,17 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
+    "test": "npm run karma:ci",
     "build": "rm -rf dist && ./node_modules/.bin/webpack",
-    "serve": "rm -rf dist && ./node_modules/.bin/webpack --watch"
+    "serve": "rm -rf dist && ./node_modules/.bin/webpack --watch",
+    "karma:tdd": "NODE_ENV=test ./node_modules/.bin/karma start ./karma.config.js",
+    "karma:ci": "NODE_ENV=test ./node_modules/.bin/karma start ./karma.config.js --single-run"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cawabunga/layer-mask.git"
   },
-  "keywords": [
-    "angular",
-    "scope",
-    "validators"
-  ],
+  "keywords": [],
   "author": "Emil Ibatullin",
   "bugs": {
     "url": "https://github.com/cawabunga/layer-mask/issues"
@@ -31,9 +30,14 @@
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-preset-es2015": "^6.24.1",
+    "jasmine-core": "2.8.0",
+    "karma": "1.7.1",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-jasmine": "1.1.0",
+    "karma-webpack": "2.0.5",
     "lodash": "^4.17.4",
-    "webpack": "^2.6.1",
-    "raw-loader": "^0.5.1"
+    "raw-loader": "^0.5.1",
+    "webpack": "^2.6.1"
   },
   "peerDependencies": {
     "jquery": "*",
