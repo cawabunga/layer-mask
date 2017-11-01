@@ -7,7 +7,9 @@
     "build": "rm -rf dist && ./node_modules/.bin/webpack",
     "serve": "rm -rf dist && ./node_modules/.bin/webpack --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "svg.js": "2.6.3"
+  },
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
