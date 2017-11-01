@@ -1,4 +1,4 @@
-Layer Mask
+Layer Mask [![Build Status](https://travis-ci.org/cawabunga/layer-mask.svg?branch=master)](https://travis-ci.org/cawabunga/layer-mask)
 ===
 
 The javascript library for creation an overlay that covers the whole page except selected elements on the page. 
