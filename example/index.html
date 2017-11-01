@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="../src/mask.css">
+  <style>
+    html, body {
+      padding: 0;
+      height: 100%;
+      overflow: auto;
+    }
+    .text-center {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<p class="text-center">
+  <a href="javascript:void(0)" onclick="alert('Clicked')" id="link-1">Hello, Kitty</a>
+</p>
+
+<p class="text-center">
+  <a href="javascript:void(0)" onclick="alert('Clicked')" id="link-3">Hello, Cawabunga!</a> (not clickable)
+</p>
+
+<p class="text-center">
+  <a href="javascript:void(0)" onclick="alert('Clicked')" id="link-2">Hello, Cawabunga!</a> (clickable)
+</p>
+
+<div id="canvas"></div>
+
+<script src="../dist/layer-mask.js"></script>
+<script>
+  const manager = new layerMask.MaskManager(document.querySelector('body'));
+  manager.revealMask(document.querySelectorAll('#link-1, #link-2'), { debug: true });
+</script>
+</body>
+</html>
