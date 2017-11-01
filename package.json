@@ -8,7 +8,9 @@
     "serve": "rm -rf dist && ./node_modules/.bin/webpack --watch"
   },
   "dependencies": {
-    "svg.js": "2.6.3"
+    "jquery": "3.2.1",
+    "svg.js": "2.6.3",
+    "underscore": "1.8.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -19,7 +21,7 @@
     "raw-loader": "^0.5.1"
   },
   "peerDependencies": {
-    "jquery": "^1.7",
+    "jquery": "*",
     "underscore": "*"
   }
 }
