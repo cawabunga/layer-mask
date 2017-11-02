@@ -66,38 +66,6 @@ function isElementFixed(element) {
 
 /**
  * @param {Array.<Element>} elements
- * @return {ClientRect}
- */
-function getSingularBoundary(elements) {
-    const rects = elements.map(function (element) {
-        return element.getBoundingClientRect();
-    });
-
-    const leftValues = rects.map(function (rect) {
-        return rect.left;
-    });
-    const rightValues = rects.map(function (rect) {
-        return rect.right;
-    });
-    const topValues = rects.map(function (rect) {
-        return rect.top;
-    });
-    const bottomValues = rects.map(function (rect) {
-        return rect.bottom;
-    });
-
-    const left = Math.min(...leftValues);
-    const right = Math.max(...rightValues);
-    const top = Math.min(...topValues);
-    const bottom = Math.max(...bottomValues);
-    const width = right - left;
-    const height = bottom - top;
-
-    return new ClientRect(left, right, top, bottom, width, height);
-}
-
-/**
- * @param {Array.<Element>} elements
  * @return {Array.<ClientRect>}
  */
 function getAllBoundaries(elements) {

@@ -9,6 +9,7 @@ module.exports = function (config) {
 
         files: [
             { pattern: 'test/**/*.test.js', watched: false },
+            { pattern: 'src/mask.css', watched: false },
             // each file act as entry point for the webpack configuration
         ],
 
