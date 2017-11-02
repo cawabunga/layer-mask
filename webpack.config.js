@@ -24,6 +24,29 @@ module.exports = {
   //  underscore: '_',
   //}],
   module: {
+    rules: [
+      {
+        enforce: 'pre',
+        test: /.test\.js$/,
+        include: /(src|test)/,
+        exclude: /(node_modules)/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015'],
+          cacheDirectory: true,
+        }
+      },
+      {
+        enforce: 'pre',
+        test: /\.js?$/,
+        include: /src/,
+        exclude: /(node_modules|test)/,
+        loader: 'babel-istanbul-loader',
+        query: {
+          cacheDirectory: true,
+        },
+      },
+    ],
     loaders: [
       {
         test: /\.js$/,

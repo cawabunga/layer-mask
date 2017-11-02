@@ -6,6 +6,7 @@ module.exports = function (config) {
 
         browsers: ['Chrome'],
         frameworks: ['jasmine'],
+        reporters: ['progress', 'coverage'],
 
         files: [
             { pattern: 'test/**/*.test.js', watched: false },
@@ -22,6 +23,17 @@ module.exports = function (config) {
         webpackMiddleware: {
             stats: 'errors-only',
             noInfo: true,
-        }
+        },
+
+        coverageReporter: {
+            dir:'tmp/coverage/',
+            reporters: [
+                { type:'html', subdir: 'report-html' },
+                { type:'lcov', subdir: 'report-lcov' }
+            ],
+            instrumenterOptions: {
+                istanbul: { noCompact:true }
+            }
+        },
     });
 };
