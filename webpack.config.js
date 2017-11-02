@@ -14,15 +14,15 @@ module.exports = {
     library: _.camelCase(libraryName),
     libraryTarget: 'umd'
   },
-  externals: [{
-    jquery: {
-      commonjs: 'jquery',
-      commonjs2: 'jquery',
-      amd: 'jquery',
-      root: 'jQuery',
-    },
-    underscore: '_',
-  }],
+  //externals: [{
+  //  jquery: {
+  //    commonjs: 'jquery',
+  //    commonjs2: 'jquery',
+  //    amd: 'jquery',
+  //    root: 'jQuery',
+  //  },
+  //  underscore: '_',
+  //}],
   module: {
     loaders: [
       {
