@@ -37,14 +37,9 @@ module.exports = {
         }
       },
       {
-        enforce: 'pre',
-        test: /\.js?$/,
+        test: /\.js$/,
         include: /src/,
-        exclude: /(node_modules|test)/,
-        loader: 'babel-istanbul-loader',
-        query: {
-          cacheDirectory: true,
-        },
+        loader: 'istanbul-instrumenter-loader',
       },
     ],
     loaders: [
