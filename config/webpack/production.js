@@ -19,7 +19,12 @@ module.exports = merge(sharedConfig, {
         amd: 'jquery',
         root: 'jQuery',
       },
-      underscore: '_',
+      underscore: {
+          commonjs: 'underscore',
+          commonjs2: 'underscore',
+          amd: 'underscore',
+          root: '_',
+      },
     }],
 
 
