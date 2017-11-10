@@ -6,6 +6,7 @@
   "main": "dist/layer-mask.js",
   "scripts": {
     "test": "npm run karma:ci",
+    "prepublish": "npm run build",
     "prebuild": "npm run test && rm -rf dist",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack",
     "preserve": "rm -rf serve",
