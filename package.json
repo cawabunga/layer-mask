@@ -48,5 +48,9 @@
   "peerDependencies": {
     "jquery": "*",
     "underscore": "*"
-  }
+  },
+  "files": [
+    "dist/*",
+    "src/*.css"
+  ]
 }
