@@ -2,7 +2,7 @@ const pkg = require('../../package.json');
 
 module.exports = {
     entry: {
-        [pkg.name]: `${__dirname}/../../index.js`
+        [pkg.name]: `${__dirname}/../../src/index.js`
     },
 
     module: {

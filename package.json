@@ -3,10 +3,10 @@
   "version": "0.1.1",
   "description": "Mask elements on the page",
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/layer-mask.js",
   "scripts": {
     "test": "npm run karma:ci",
-    "prebuild": "rm -rf dist",
+    "prebuild": "npm run test && rm -rf dist",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack",
     "preserve": "rm -rf serve",
     "serve": "./node_modules/.bin/webpack --watch",
