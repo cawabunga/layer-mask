@@ -15,6 +15,9 @@ Some details about the library:
 ### Installation
 `$ npm install layer-mask`
 
+### Documentation
+Please see the source code of [LayerMask](src/maskCreators/LayerMask.js) and [MaskManager](src/MaskManager.js).
+
 ### Usage
 Direct usage:
 ```javascript
@@ -43,7 +46,5 @@ maskElement.onclick = () => {
 ```
 
 ### Roadmap
-- add tests
-- add bundled version
 - add public example page
 - release
