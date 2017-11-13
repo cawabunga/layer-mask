@@ -1,3 +1,5 @@
+const uniq = require('../utils/uniq');
+
 /**
  * @name ClientRect
  */
@@ -43,6 +45,27 @@ class ClientRect {
             && this.isPointCollides(vector.terminal)
             && this.isPointCollides(vector.getMiddlePoint());
     }
+
+    /**
+     * @static
+     * @param {Array.<ClientRect>} rectangles
+     * @returns {Array.<number>}
+     */
+    static mapVertexesToAxisX(rectangles) {
+        const abscissas = rectangles.reduce((memo, r) =>  memo.concat([r.left, r.left + r.width]), [0]);
+        return uniq(abscissas).sort((a, b) => a - b);
+    }
+
+    /**
+     * @static
+     * @param {Array.<ClientRect>} rectangles
+     * @returns {Array.<number>}
+     */
+    static mapVertexesToAxisY(rectangles) {
+        const ordinates = rectangles.reduce((memo, r) =>  memo.concat([r.top, r.top + r.height]), [0]);
+        return uniq(ordinates).sort((a, b) => a - b);
+    }
+
 }
 
 module.exports = ClientRect;

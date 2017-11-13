@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const { Point, Vector } = require('../dataTypes');
+const { Point, Vector, ClientRect } = require('../dataTypes');
 const LayerMask = require('./LayerMask');
 
 class TableMaskCreator extends LayerMask {
@@ -13,21 +13,8 @@ class TableMaskCreator extends LayerMask {
      */
     buildMask(canvasDimension, isFixed, rectangles) {
 
-        const rowPositions = _.chain(rectangles)
-            .reduce((memo, r) => {
-                return memo.concat([r.top, r.top + r.height]);
-            }, [0])
-            .uniq()
-            .sort((a, b) => a - b)
-            .value();
-
-        const colPositions = _.chain(rectangles)
-            .reduce((memo, r) => {
-                return memo.concat([r.left, r.left + r.width]);
-            }, [0])
-            .uniq()
-            .sort((a, b) => a - b)
-            .value();
+        const colPositions = ClientRect.mapVertexesToAxisX(rectangles);
+        const rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
 
         const container = document.createElement('div');
         if (this.config.debug) {

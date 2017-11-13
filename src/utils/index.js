@@ -1,4 +1,4 @@
-const { ClientRect } = require('./dataTypes');
+const { ClientRect } = require('../dataTypes');
 
 module.exports = {
     getPageDimensions,
