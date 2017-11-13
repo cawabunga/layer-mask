@@ -22,7 +22,8 @@ describe('MaskManager', () => {
         });
 
         it('should has properties', () => {
-            expect(maskManager.container).toBe(container);
+            expect(maskManager.hasOwnProperty('currentLayerMask')).toBe(true);
+            expect(maskManager.hasOwnProperty('activeMaskElement')).toBe(true);
         });
 
         it('should has specific interface', () => {

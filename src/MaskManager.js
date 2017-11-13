@@ -5,7 +5,7 @@ class MaskManager {
      * @param {Element} container
      */
     constructor(container) {
-        this.container = container;
+        this._container = container;
         this.currentLayerMask = undefined;
         this.activeMaskElement = undefined;
     }
@@ -59,7 +59,7 @@ class MaskManager {
      * @param {Element} maskElement
      */
     setActiveMask(maskElement) {
-        this.container.appendChild(maskElement);
+        this._container.appendChild(maskElement);
         this.activeMaskElement = maskElement;
     }
 
