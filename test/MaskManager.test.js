@@ -55,12 +55,21 @@ describe('MaskManager', () => {
             });
         });
 
-        it('#hideActiveMask(): should remove a mask element from the container', () => {
-            const maskElement = maskManager.revealMask(layerMaskMock);
-            expect(container.contains(maskElement)).toBe(true);
+        describe('#hideActiveMask():', () => {
 
-            maskManager.hideActiveMask();
-            expect(container.contains(maskElement)).toBe(false);
+            it('should throw when if hide invoked with missing mask element', () => {
+                const fn = () => maskManager.hideActiveMask();
+                expect(fn).toThrow();
+            });
+
+            it('should remove a mask element from the container', () => {
+                const maskElement = maskManager.revealMask(layerMaskMock);
+                expect(container.contains(maskElement)).toBe(true);
+
+                maskManager.hideActiveMask();
+                expect(container.contains(maskElement)).toBe(false);
+            });
+
         });
 
         describe('#refreshMask():', () => {

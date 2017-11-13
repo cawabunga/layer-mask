@@ -30,8 +30,13 @@ class MaskManager {
 
     /**
      * @public
+     * @throws {Error} Will throw an error if the mask element is not defined.
      */
     hideActiveMask() {
+        if (!this.activeMaskElement) {
+            throw new Error('mask element is missing');
+        }
+
         this.activeMaskElement.remove();
         this.activeMaskElement = undefined;
     }
