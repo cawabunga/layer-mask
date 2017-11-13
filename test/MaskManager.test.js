@@ -63,5 +63,32 @@ describe('MaskManager', () => {
             expect(container.contains(maskElement)).toBe(false);
         });
 
+        describe('#refreshMask():', () => {
+
+            it('should throw if refresh invoked before the mask was set', () => {
+                const fn = () => maskManager.refreshMask();
+                expect(fn).toThrow();
+            });
+
+            it('should return a just created mask element', () => {
+                maskManager.revealMask(layerMaskMock);
+
+                spyOn(layerMaskMock, 'createMask').and.returnValue(layerMaskElement);
+                const result = maskManager.refreshMask();
+
+                expect(result).toBe(layerMaskElement);
+            });
+
+            it('should recreate the mask element', () => {
+                const maskElement1 = maskManager.revealMask(layerMaskMock);
+                expect(container.contains(maskElement1)).toBe(true);
+
+                const maskElement2 = maskManager.refreshMask();
+                expect(container.contains(maskElement1)).toBe(false);
+                expect(container.contains(maskElement2)).toBe(true);
+            });
+
+        });
+
     });
 });

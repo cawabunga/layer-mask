@@ -6,7 +6,8 @@ class MaskManager {
      */
     constructor(container) {
         this.container = container;
-        this.activeMask = undefined;
+        this.currentLayerMask = undefined;
+        this.activeMaskElement = undefined;
     }
 
     /**
@@ -15,9 +16,11 @@ class MaskManager {
      * @return {Element}
      */
     revealMask(layerMask) {
-        if (this.activeMask) {
+        if (this.activeMaskElement) {
             this.hideActiveMask();
         }
+
+        this.currentLayerMask = layerMask;
 
         const maskElement = layerMask.createMask();
         this.setActiveMask(maskElement);
@@ -29,8 +32,21 @@ class MaskManager {
      * @public
      */
     hideActiveMask() {
-        this.activeMask.remove();
-        this.activeMask = undefined;
+        this.activeMaskElement.remove();
+        this.activeMaskElement = undefined;
+    }
+
+    /**
+     * @public
+     * @throws {Error} Will throw an error if the layer mask instance is not passed before.
+     * @return {Element}
+     */
+    refreshMask() {
+        if (!this.currentLayerMask) {
+            throw new Error('layer mask is missing');
+        }
+
+        return this.revealMask(this.currentLayerMask);
     }
 
     /**
@@ -39,7 +55,7 @@ class MaskManager {
      */
     setActiveMask(maskElement) {
         this.container.appendChild(maskElement);
-        this.activeMask = maskElement;
+        this.activeMaskElement = maskElement;
     }
 
 }
