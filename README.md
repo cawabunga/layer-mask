@@ -11,7 +11,7 @@ Here are useful cases:
 Some details about the library:
 - supports handling the fixed positioned elements
 - written using ES6 and CommonJS modules (published as UMD)
-- uses **flexboxes** by the default, but you can [override it](src/mask.css)
+- uses **flexboxes** by the default, but you can [override it](src/layer-mask.css)
 
 ### Installation
 `$ npm install layer-mask`
