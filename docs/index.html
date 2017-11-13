@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="./lib/mask.css">
+  <style>
+    html, body {
+      padding: 0;
+      height: 100%;
+      overflow: auto;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 1em 0;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    #form {
+      position: absolute;
+      padding: 1em;
+      border: 1px solid #999;
+      background: #fafafa;
+    }
+
+    #form label {
+      display: block;
+      margin-bottom: .5em;
+    }
+
+    #form button {
+      padding: 10px;
+    }
+
+    #block-1 {
+      width: 30%;
+      margin: auto;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .col {
+      flex: 0 0 40%;
+    }
+  </style>
+</head>
+<body>
+
+<form name="form" id="form" onsubmit="refresh(event, form)">
+  <label><input type="checkbox" name="blockIds" value="#block-1" checked /> Block 1</label>
+  <label><input type="checkbox" name="blockIds" value="#block-2" /> Block 2</label>
+  <label><input type="checkbox" name="blockIds" value="#block-3" /> Block 3</label>
+  <label><input type="checkbox" name="blockIds" value="#form" checked /> Form (please don't do it)</label>
+  <hr>
+  <label><input type="text" name="padding" value="5" style="width: 30px; text-align: center;" /> px padding</label>
+  <label><input type="checkbox" name="debug" checked /> Enable debug mode</label>
+  <hr>
+  <div class="text-center">
+    <button id="toggleButton">Toggle Mask</button>
+  </div>
+</form>
+
+<div id="block-1">
+  <h4>Почему мгновенно полнолуние?</h4>
+
+  <p>Солнечное затмение иллюстрирует эллиптический часовой угол. Противостояние колеблет межпланетный астероид. Зенитное
+     часовое число иллюстрирует космический лимб. Лимб пространственно выбирает межпланетный метеорит. Эклиптика
+     однородно
+     перечеркивает аргумент перигелия.</p>
+
+  <p>Земная группа формировалась ближе к Солнцу, однако небесная сфера дает межпланетный керн. Pадиотелескоп Максвелла
+     ищет дип-скай объект. Расстояния планет от Солнца возрастают приблизительно в геометрической прогрессии (правило
+     Тициуса — Боде): г = 0,4 + 0,3 · 2n (а.е.), где магнитное поле непрерывно. Газопылевое облако, в первом
+     приближении, гасит перигей.</p>
+</div>
+
+<div class="row">
+  <div class="col">
+
+    <h4>Циркулирующий луч: гипотеза и теории</h4>
+
+    <p id="block-2">Гравитирующая сфера восстанавливает тангенциальный кварк, в итоге возможно появление обратной связи и
+       самовозбуждение системы. Лептон нейтрализует экситон, однозначно свидетельствуя о неустойчивости процесса в
+       целом. Кристалл искажает плоскополяризованный атом. Квант, даже при наличии сильных аттракторов, восстанавливает
+       квантовый объект, поскольку любое другое поведение нарушало бы изотропность пространства. Резонатор
+       переворачивает элементарный вихрь.
+    </p>
+
+    <p>Непосредственно из законов сохранения следует, что вселенная переворачивает нестационарный вихрь. Темная материя
+       отталкивает магнит. Расслоение, как и везде в пределах наблюдаемой вселенной, бифокально масштабирует луч. Взвесь
+       недетерминировано возбуждает нестационарный экситон. Многочисленные расчеты предсказывают, а эксперименты
+       подтверждают, что поверхность отталкивает объект. При наступлении резонанса пульсар усиливает газ.</p>
+
+  </div>
+  <div class="col">
+
+    <img src="http://lorempixel.com/800/600/cats/" alt="cat" id="block-3" style="max-width: 500px" />
+
+  </div>
+</div>
+
+<script src="./lib/layer-mask.js"></script>
+<script>
+    var container = document.querySelector('body');
+    var maskManager = new layerMask.MaskManager(container);
+
+    function refresh(event, form) {
+        event.preventDefault();
+
+        var debug = form.debug.checked;
+
+        var inputs = [].slice.call(form.blockIds);
+        var selector = inputs
+            .filter(function (input) {
+                return input.checked;
+            })
+            .map(function (input) {
+                return input.value;
+            })
+            .join(',');
+
+        var padding = Number(form.padding.value) || 0;
+
+        var targetElements = document.querySelectorAll(selector);
+        var mask = new layerMask.LayerMask(targetElements, {
+            debug: debug,
+            padding: padding,
+        });
+
+        toggleMask(mask);
+    }
+
+    function toggleMask(mask) {
+        if (maskManager.activeMaskElement) {
+            maskManager.hideActiveMask();
+        } else {
+            maskManager.revealMask(mask);
+        }
+    }
+</script>
+</body>
+</html>

@@ -13,7 +13,8 @@
     "serve": "./node_modules/.bin/webpack --watch",
     "karma:tdd": "NODE_ENV=test ./node_modules/.bin/karma start ./karma.config.js",
     "karma:ci": "NODE_ENV=test ./node_modules/.bin/karma start ./karma.config.js --single-run",
-    "coveralls": "cat ./tmp/coverage/report-lcov/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "cat ./tmp/coverage/report-lcov/lcov.info | ./node_modules/.bin/coveralls",
+    "build:docs": "./bin/build-docs.sh"
   },
   "repository": {
     "type": "git",
