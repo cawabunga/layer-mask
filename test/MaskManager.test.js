@@ -4,7 +4,7 @@ describe('MaskManager', () => {
     const MaskManager = require('../src/MaskManager');
 
     it('should be a function', () => {
-        expect(_.isFunction(MaskManager)).toBe(true);
+        expect(MaskManager).toEqual(jasmine.any(Function));
     });
 
     describe('instance', () => {
@@ -21,8 +21,8 @@ describe('MaskManager', () => {
         });
 
         it('should has specific interface', () => {
-            expect(_.isFunction(maskManager.revealMask)).toBe(true);
-            expect(_.isFunction(maskManager.hideActiveMask)).toBe(true);
+            expect(maskManager.revealMask).toEqual(jasmine.any(Function));
+            expect(maskManager.hideActiveMask).toEqual(jasmine.any(Function));
         });
 
         describe('#revealMask():', () => {

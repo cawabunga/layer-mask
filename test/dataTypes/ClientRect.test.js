@@ -6,7 +6,7 @@ describe('ClientRect', () => {
     const Vector = require('../../src/dataTypes/Vector');
 
     it('should be a function', () => {
-        expect(_.isFunction(ClientRect)).toBe(true);
+        expect(ClientRect).toEqual(jasmine.any(Function));
     });
 
     describe('instance', () => {
@@ -31,8 +31,8 @@ describe('ClientRect', () => {
         });
 
         it('should has specific interface', () => {
-            expect(_.isFunction(clientRect.isPointCollides)).toBe(true);
-            expect(_.isFunction(clientRect.isVectorCollides)).toBe(true);
+            expect(clientRect.isPointCollides).toEqual(jasmine.any(Function));
+            expect(clientRect.isVectorCollides).toEqual(jasmine.any(Function));
         });
 
         it('#isPointCollides(): checks for inner point', () => {

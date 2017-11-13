@@ -4,7 +4,7 @@ describe('Point', () => {
     const Point = require('../../src/dataTypes/Point');
 
     it('should be a function', () => {
-        expect(_.isFunction(Point)).toBe(true);
+        expect(Point).toEqual(jasmine.any(Function));
     });
 
     it('instance should has properties', () => {

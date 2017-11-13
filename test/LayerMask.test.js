@@ -8,7 +8,7 @@ describe('LayerMask', () => {
     });
 
     it('should be a function', () => {
-        expect(_.isFunction(LayerMask)).toBe(true);
+        expect(LayerMask).toEqual(jasmine.any(Function));
     });
 
     it('should has default configuration property', () => {
@@ -47,9 +47,9 @@ describe('LayerMask', () => {
         });
 
         it('should has specific interface', () => {
-            expect(_.isFunction(layerMask.createMask)).toBe(true);
-            expect(_.isArray(layerMask.elements)).toBe(true);
-            expect(_.isObject(layerMask.config)).toBe(true);
+            expect(layerMask.createMask).toEqual(jasmine.any(Function));
+            expect(layerMask.elements).toEqual(jasmine.any(Array));
+            expect(layerMask.config).toEqual(jasmine.any(Object));
         });
 
         describe('#createMask():', () => {
