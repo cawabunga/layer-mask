@@ -10,7 +10,6 @@ Here are useful cases:
 Some details about the library:
 - supports handling the fixed positioned elements
 - written using ES6 and CommonJS modules (umd version will be added in next major version)
-- requires **underscore** (will be removed in the next versions)
 - uses **flexboxes** by the default, but you can [override it](src/mask.css)
 
 ### Installation
@@ -45,7 +44,6 @@ maskElement.onclick = () => {
 
 ### Roadmap
 - add tests
-- remove underscore
 - add bundled version
 - add public example page
 - release

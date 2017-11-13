@@ -1,6 +1,5 @@
 
 describe('ClientRect', () => {
-    const _ = require('underscore');
     const ClientRect = require('../../src/dataTypes/ClientRect');
     const Point = require('../../src/dataTypes/Point');
     const Vector = require('../../src/dataTypes/Vector');

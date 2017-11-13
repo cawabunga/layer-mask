@@ -1,6 +1,5 @@
 
 describe('MaskManager', () => {
-    const _ = require('underscore');
     const MaskManager = require('../src/MaskManager');
 
     it('should be a function', () => {

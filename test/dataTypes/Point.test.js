@@ -1,6 +1,5 @@
 
 describe('Point', () => {
-    const _ = require('underscore');
     const Point = require('../../src/dataTypes/Point');
 
     it('should be a function', () => {

@@ -1,6 +1,5 @@
 
 describe('Vector', () => {
-    const _ = require('underscore');
     const Vector = require('../../src/dataTypes/Vector');
     const Point = require('../../src/dataTypes/Point');
 

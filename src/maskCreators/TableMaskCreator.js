@@ -1,4 +1,3 @@
-const _ = require('underscore');
 const { Point, Vector, ClientRect } = require('../dataTypes');
 const LayerMask = require('./LayerMask');
 
@@ -76,13 +75,13 @@ class TableMaskCreator extends LayerMask {
      * @param {?Function} [cb]
      */
     addChildren(container, count, tagName, cb = undefined) {
-        _.times(count, (i) => {
+        for (let i = 0; i < count; i++) {
             const child = document.createElement(tagName);
             container.appendChild(child);
             if (cb) {
                 cb(child, i);
             }
-        });
+        }
     }
 
 }

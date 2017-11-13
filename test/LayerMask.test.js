@@ -1,5 +1,4 @@
 describe('LayerMask', () => {
-    const _ = require('underscore');
     const LayerMask = require('../src/LayerMask');
 
     let body;
