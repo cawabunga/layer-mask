@@ -13,10 +13,38 @@ describe('utils', () => {
     });
 
     describe('isElementFixed()', () => {
+
+        let styleElement, element;
+
+        beforeAll(() => {
+            styleElement = document.createElement('style');
+            styleElement.type = 'text/css';
+            styleElement.innerHTML = '.fixed { position: fixed; }';
+            document.getElementsByTagName('head')[0].appendChild(styleElement);
+        });
+
+        afterAll(() => {
+            styleElement.remove();
+        });
+
+        beforeEach(() => {
+            element = document.createElement('div');
+            document.body.appendChild(element);
+        });
+
+        afterEach(() => {
+            element.remove();
+            element = undefined;
+        });
+
         it('should return false for not fixed elements', () => {
             const staticEl = document.createElement('div');
             const relativeEl = document.createElement('div');
             const absoluteEl = document.createElement('div');
+
+            element.appendChild(staticEl);
+            element.appendChild(relativeEl);
+            element.appendChild(absoluteEl);
 
             staticEl.style.position = 'static';
             relativeEl.style.position = 'relative';
@@ -28,22 +56,25 @@ describe('utils', () => {
         });
 
         it('should return true for fixed element', () => {
-            const fixedEl = document.createElement('div');
-            fixedEl.style.position = 'fixed';
-            expect(utils.isElementFixed(fixedEl)).toBe(true);
+            element.style.position = 'fixed';
+            expect(utils.isElementFixed(element)).toBe(true);
         });
 
         it('should return true if it has fixed parent', () => {
-            const rootEl = document.createElement('div');
             const fixedEl = document.createElement('div');
             const childEl = document.createElement('div');
 
-            rootEl.appendChild(fixedEl);
+            element.appendChild(fixedEl);
             fixedEl.appendChild(childEl);
 
             fixedEl.style.position = 'fixed';
 
             expect(utils.isElementFixed(childEl)).toBe(true);
+        });
+
+        it('should also process css classes', () => {
+            element.classList.add('fixed');
+            expect(utils.isElementFixed(element)).toBe(true);
         });
     });
 

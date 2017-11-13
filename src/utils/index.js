@@ -48,12 +48,21 @@ function getScrollDimensions() {
 
 /**
  * @param {Element} element
+ * @param {string} property
+ * @return {string}
+ */
+function css(element, property) {
+    return window.getComputedStyle(element).getPropertyValue(property);
+}
+
+/**
+ * @param {Element} element
  * @return {boolean}
  */
 function isElementFixed(element) {
     const parents = getParentElements(element);
     const elements = [element].concat(parents);
-    return elements.some(element => element.style.position === 'fixed');
+    return elements.some(element => css(element, 'position') === 'fixed');
 }
 
 /**
