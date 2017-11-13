@@ -12,14 +12,4 @@ module.exports = merge(sharedConfig, {
         libraryTarget: 'umd',
     },
 
-    externals: [{
-      underscore: {
-          commonjs: 'underscore',
-          commonjs2: 'underscore',
-          amd: 'underscore',
-          root: '_',
-      },
-    }],
-
-
 });
