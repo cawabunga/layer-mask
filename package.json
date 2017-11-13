@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/cawabunga/layer-mask#readme",
   "dependencies": {
-    "jquery": "3.2.1",
     "svg.js": "2.6.3",
     "underscore": "1.8.3"
   },
@@ -47,7 +46,6 @@
     "webpack-merge": "4.1.1"
   },
   "peerDependencies": {
-    "jquery": "*",
     "underscore": "*"
   },
   "files": [

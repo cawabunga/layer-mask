@@ -1,4 +1,3 @@
-const $ = require('jquery');
 const { ClientRect } = require('./dataTypes');
 
 module.exports = {
@@ -52,16 +51,25 @@ function getScrollDimensions() {
  * @return {boolean}
  */
 function isElementFixed(element) {
-    element = $(element);
-    const elements = element.add(element.parents());
-    let isFixed = false;
-    elements.each(function () {
-        if ($(this).css("position") === "fixed") {
-            isFixed = true;
-            return false;
-        }
-    });
-    return isFixed;
+    const parents = getParentElements(element);
+    const elements = [element].concat(parents);
+    return elements.some(element => element.style.position === 'fixed');
+}
+
+/**
+ * @param {Element} element
+ * @return {Array.<Element>}
+ */
+function getParentElements(element) {
+    const parents = [];
+
+    let child = element;
+    while (child.parentElement) {
+        parents.push(child.parentElement);
+        child = child.parentElement;
+    }
+
+    return parents;
 }
 
 /**
