@@ -11,11 +11,14 @@ class TableMaskCreator extends LayerMask {
      * @return {Element}
      */
     buildMask(canvasDimension, isFixed, rectangles) {
-
         const colPositions = ClientRect.mapVertexesToAxisX(rectangles);
         const rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
 
         const container = document.createElement('div');
+
+        container.style.width = this.px(canvasDimension.width);
+        container.style.height = this.px(canvasDimension.height);
+
         if (this.config.debug) {
             container.classList.add(this.config.classesDebug);
         }

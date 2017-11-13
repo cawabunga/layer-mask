@@ -52,7 +52,7 @@ class LayerMask {
      */
     createMask() {
         const isFixed = utils.isElementFixed(this.elements[0]);
-        const canvasDimension = isFixed ? utils.getPageDimensions() : utils.getWindowDimensions();
+        const canvasDimension = isFixed ? utils.getWindowDimensions() : utils.getPageDimensions();
 
         const rectangles = utils.getAllBoundaries(this.elements)
             .map(rect => utils.addPadding(rect, this.config.padding))

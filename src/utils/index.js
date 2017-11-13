@@ -20,9 +20,22 @@ module.exports = {
  * @return {Dimension}
  */
 function getPageDimensions() {
+    const contentDimension = getContentDimensions();
+    const windowDimension = getWindowDimensions();
+
     return {
-        height: document.body.scrollHeight,
-        width: document.body.scrollWidth
+        height: Math.max(contentDimension.height, windowDimension.height),
+        width: Math.max(contentDimension.width, windowDimension.width),
+    };
+}
+
+/**
+ * @return {Dimension}
+ */
+function getContentDimensions() {
+    return {
+        height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
+        width: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth)
     };
 }
 
@@ -31,8 +44,8 @@ function getPageDimensions() {
  */
 function getWindowDimensions() {
     return {
-        height: window.innerHeight,
-        width: window.innerWidth
+        height: document.documentElement.clientHeight,
+        width: document.documentElement.clientWidth
     };
 }
 
