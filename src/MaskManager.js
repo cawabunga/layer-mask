@@ -1,4 +1,3 @@
-const LayerMask = require('./LayerMask');
 
 class MaskManager {
 
@@ -12,16 +11,14 @@ class MaskManager {
 
     /**
      * @public
-     * @param {NodeList|Element} elements
-     * @param {LayerMaskConfig} layerMaskConfig
+     * @param {LayerMask} layerMask
      * @return {Element}
      */
-    revealMask(elements, layerMaskConfig = {}) {
+    revealMask(layerMask) {
         if (this.activeMask) {
             this.hideActiveMask();
         }
 
-        const layerMask = new LayerMask(elements, layerMaskConfig);
         const maskElement = layerMask.createMask();
         this.setActiveMask(maskElement);
 

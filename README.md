@@ -30,13 +30,13 @@ document.querySelector('body').appendChild(maskElement);
 
 Using the mask manager:
 ```javascript
-const { MaskManager } = require('layer-mask');
+const { MaskManager, LayerMask } = require('layer-mask');
 
 const container = document.querySelector('body');
 const maskManager = new MaskManager(container);
 
-const myElements = document.querySelectorAll('#link-1, #link-2');
-const maskElement = maskManager.revealMask(myElements);
+const mask = new LayerMask(document.querySelectorAll('#link-1, #link-2'));
+const maskElement = maskManager.revealMask(mask);
 
 maskElement.onclick = () => {
     maskManager.hideActiveMask();

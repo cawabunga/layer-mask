@@ -9,11 +9,16 @@ describe('MaskManager', () => {
 
     describe('instance', () => {
 
-        let maskManager, container, targetElement;
+        let maskManager, container, layerMaskMock, layerMaskElement;
+
         beforeEach(() => {
             container = document.querySelector('body');
-            targetElement = container; // does not matter what element
             maskManager = new MaskManager(container);
+
+            layerMaskElement = document.createElement('div');
+            layerMaskMock = {
+                createMask: () => document.createElement('div')
+            };
         });
 
         it('should has properties', () => {
@@ -27,27 +32,31 @@ describe('MaskManager', () => {
 
         describe('#revealMask():', () => {
 
-            let maskElement;
-            beforeEach(() => {
-                maskElement = maskManager.revealMask(targetElement);
-            });
+            it('should return a just created mask element', () => {
+                spyOn(layerMaskMock, 'createMask').and.returnValue(layerMaskElement);
+                const result = maskManager.revealMask(layerMaskMock);
 
-            it('should return a mask element', () => {
-                expect(maskElement instanceof Element).toBe(true);
+                expect(result).toBe(layerMaskElement);
             });
 
             it('should append a mask element to the container', () => {
-                expect(container.contains(maskElement)).toBe(true);
+                spyOn(layerMaskMock, 'createMask').and.returnValue(layerMaskElement);
+                maskManager.revealMask(layerMaskMock);
+
+                expect(container.contains(layerMaskElement)).toBe(true);
             });
 
-            it('should remove previous one', () => {
-                maskManager.revealMask(targetElement);
-                expect(container.contains(maskElement)).toBe(false);
+            it('should remove the previous mask element', () => {
+                const el1 = maskManager.revealMask(layerMaskMock);
+                const el2 = maskManager.revealMask(layerMaskMock);
+
+                expect(container.contains(el1)).toBe(false);
+                expect(container.contains(el2)).toBe(true);
             });
         });
 
         it('#hideActiveMask(): should remove a mask element from the container', () => {
-            const maskElement = maskManager.revealMask(targetElement);
+            const maskElement = maskManager.revealMask(layerMaskMock);
             expect(container.contains(maskElement)).toBe(true);
 
             maskManager.hideActiveMask();

@@ -40,8 +40,11 @@
 
 <script src="../serve/layer-mask.js"></script>
 <script>
-  const manager = new layerMask.MaskManager(document.querySelector('body'));
-  manager.revealMask(document.querySelectorAll('#link-1, #link-2'), { debug: true });
+    (function () {
+        const manager = new layerMask.MaskManager(document.querySelector('body'));
+        const mask = new layerMask.LayerMask(document.querySelectorAll('#link-1, #link-2'), { debug: true });
+        manager.revealMask(mask);
+    }());
 </script>
 </body>
 </html>
