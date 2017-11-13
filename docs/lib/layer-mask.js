@@ -469,7 +469,7 @@ var LayerMask = function () {
             var _this = this;
 
             var isFixed = utils.isElementFixed(this.elements[0]);
-            var canvasDimension = isFixed ? utils.getPageDimensions() : utils.getWindowDimensions();
+            var canvasDimension = isFixed ? utils.getWindowDimensions() : utils.getPageDimensions();
 
             var rectangles = utils.getAllBoundaries(this.elements).map(function (rect) {
                 return utils.addPadding(rect, _this.config.padding);
@@ -549,6 +549,10 @@ var TableMaskCreator = function (_LayerMask) {
             var rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
 
             var container = document.createElement('div');
+
+            container.style.width = this.px(canvasDimension.width);
+            container.style.height = this.px(canvasDimension.height);
+
             if (this.config.debug) {
                 container.classList.add(this.config.classesDebug);
             }
@@ -663,9 +667,22 @@ module.exports = {
  * @return {Dimension}
  */
 function getPageDimensions() {
+    var contentDimension = getContentDimensions();
+    var windowDimension = getWindowDimensions();
+
     return {
-        height: document.body.scrollHeight,
-        width: document.body.scrollWidth
+        height: Math.max(contentDimension.height, windowDimension.height),
+        width: Math.max(contentDimension.width, windowDimension.width)
+    };
+}
+
+/**
+ * @return {Dimension}
+ */
+function getContentDimensions() {
+    return {
+        height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
+        width: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth)
     };
 }
 
@@ -674,8 +691,8 @@ function getPageDimensions() {
  */
 function getWindowDimensions() {
     return {
-        height: window.innerHeight,
-        width: window.innerWidth
+        height: document.documentElement.clientHeight,
+        width: document.documentElement.clientWidth
     };
 }
 
@@ -691,13 +708,22 @@ function getScrollDimensions() {
 
 /**
  * @param {Element} element
+ * @param {string} property
+ * @return {string}
+ */
+function css(element, property) {
+    return window.getComputedStyle(element).getPropertyValue(property);
+}
+
+/**
+ * @param {Element} element
  * @return {boolean}
  */
 function isElementFixed(element) {
     var parents = getParentElements(element);
     var elements = [element].concat(parents);
     return elements.some(function (element) {
-        return element.style.position === 'fixed';
+        return css(element, 'position') === 'fixed';
     });
 }
 
