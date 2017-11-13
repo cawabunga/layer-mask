@@ -1,7 +1,8 @@
 Layer Mask [![Build Status](https://travis-ci.org/cawabunga/layer-mask.svg?branch=master)](https://travis-ci.org/cawabunga/layer-mask) [![Coverage Status](https://coveralls.io/repos/cawabunga/layer-mask/badge.svg?branch=master)](https://coveralls.io/r/cawabunga/layer-mask?branch=master)
 ===
 
-The javascript library for creation an overlay that covers the whole page except selected elements on the page. 
+The javascript library for creation an overlay that covers the whole page except selected elements on the page.
+You can find a little [live demo here](https://cawabunga.github.io/layer-mask/). 
 
 Here are useful cases: 
 - allow/disallow clicking the specific elements on the page
@@ -9,7 +10,7 @@ Here are useful cases:
 
 Some details about the library:
 - supports handling the fixed positioned elements
-- written using ES6 and CommonJS modules (umd version will be added in next major version)
+- written using ES6 and CommonJS modules (published as UMD)
 - uses **flexboxes** by the default, but you can [override it](src/mask.css)
 
 ### Installation
@@ -46,5 +47,4 @@ maskElement.onclick = () => {
 ```
 
 ### Roadmap
-- add public example page
 - release
