@@ -25,9 +25,7 @@
     "url": "https://github.com/cawabunga/layer-mask/issues"
   },
   "homepage": "https://github.com/cawabunga/layer-mask#readme",
-  "dependencies": {
-    "svg.js": "2.6.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
