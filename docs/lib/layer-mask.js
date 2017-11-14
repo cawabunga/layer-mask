@@ -123,7 +123,198 @@ module.exports = {
 "use strict";
 
 
-module.exports = __webpack_require__(8);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var utils = __webpack_require__(7);
+
+var _require = __webpack_require__(1),
+    Point = _require.Point,
+    Vector = _require.Vector,
+    ClientRect = _require.ClientRect;
+
+var LayerMask = function () {
+    _createClass(LayerMask, null, [{
+        key: 'defaults',
+
+
+        /**
+         * @typedef {Object} LayerMaskConfig
+         *
+         * @property {boolean} [debug]
+         * @property {number} [padding]
+         * @property {string} [classes]
+         * @property {string} [classesCanvas]
+         * @property {string} [classesSvg]
+         * @property {string} [classesFixed]
+         * @property {string} [classesTable]
+         * @property {string} [classesTableRow]
+         * @property {string} [classesTableCell]
+         * @property {string} [classesTableCellHole]
+         * @property {string} [classesDebug]
+         *
+         *
+         * @static
+         * @return {LayerMaskConfig}
+         */
+        get: function get() {
+            return {
+                debug: false,
+                padding: 0,
+                classes: 'layer-mask',
+                classesDebug: 'layer-mask--debug',
+                classesTable: 'layer-mask-table',
+                classesTableRow: 'layer-mask-table__row',
+                classesTableCell: 'layer-mask-table__cell',
+                classesTableCellHole: 'layer-mask-table__cell--hole',
+                classesCanvas: 'layer-mask--canvas',
+                classesSvg: 'layer-mask--svg',
+                classesFixed: 'layer-mask--fixed'
+            };
+        }
+
+        /**
+         * @param {NodeList|Element} elements
+         * @param {LayerMaskConfig} config
+         */
+
+    }]);
+
+    function LayerMask(elements, config) {
+        _classCallCheck(this, LayerMask);
+
+        this.config = Object.assign({}, this.constructor.defaults, config);
+        this.elements = elements.length ? [].slice.call(elements) : [elements];
+    }
+
+    /**
+     * @public
+     * @return {Element}
+     */
+
+
+    _createClass(LayerMask, [{
+        key: 'createMask',
+        value: function createMask() {
+            var _this = this;
+
+            var isFixed = utils.isElementFixed(this.elements[0]);
+            var canvasDimension = isFixed ? utils.getWindowDimensions() : utils.getPageDimensions();
+
+            var rectangles = utils.getAllBoundaries(this.elements).map(function (rect) {
+                return utils.addPadding(rect, _this.config.padding);
+            }).map(function (rect) {
+                return utils.addPageOffset(rect, isFixed);
+            });
+
+            return this.buildMask(canvasDimension, isFixed, rectangles);
+        }
+
+        /**
+         * @private
+         * @param {Dimension} canvasDimension
+         * @param {Boolean} isFixed
+         * @param {Array.<ClientRect>} rectangles
+         * @return {Element}
+         */
+
+    }, {
+        key: 'buildMask',
+        value: function buildMask(canvasDimension, isFixed, rectangles) {
+            var _this2 = this;
+
+            var colPositions = ClientRect.mapVertexesToAxisX(rectangles);
+            var rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
+
+            var container = document.createElement('div');
+
+            container.style.width = this.px(canvasDimension.width);
+            container.style.height = this.px(canvasDimension.height);
+
+            if (this.config.debug) {
+                container.classList.add(this.config.classesDebug);
+            }
+
+            this.addChildren(container, rowPositions.length, 'div', function (row, i) {
+                var rowInitial = rowPositions[i];
+                var rowTerminal = rowPositions[i + 1];
+
+                row.classList.add(_this2.config.classesTableRow);
+                if (rowTerminal) {
+                    row.style.height = _this2.px(rowTerminal - rowInitial);
+                }
+
+                _this2.addChildren(row, colPositions.length, 'div', function (cell, j) {
+                    var colInitial = colPositions[j];
+                    var colTerminal = colPositions[j + 1];
+
+                    cell.classList.add(_this2.config.classesTableCell);
+                    if (colTerminal) {
+                        cell.style.width = _this2.px(colTerminal - colInitial);
+                    }
+
+                    if (rowTerminal !== undefined && colTerminal !== undefined) {
+                        var initialPoint = new Point(colInitial, rowInitial);
+                        var terminalPoint = new Point(colTerminal, rowTerminal);
+                        var vector = new Vector(initialPoint, terminalPoint);
+
+                        if (rectangles.some(function (r) {
+                            return r.isVectorCollides(vector);
+                        })) {
+                            cell.classList.add(_this2.config.classesTableCellHole);
+                        }
+                    }
+                });
+            });
+
+            container.classList.add(this.config.classes, this.config.classesTable);
+            if (isFixed) {
+                container.classList.add(this.config.classesFixed);
+            }
+
+            return container;
+        }
+
+        /**
+         * @private
+         * @param {number} value
+         * @return {string}
+         */
+
+    }, {
+        key: 'px',
+        value: function px(value) {
+            return value + 'px';
+        }
+
+        /**
+         * @private
+         * @param {Element} container
+         * @param {number} count
+         * @param {string} tagName
+         * @param {?Function} [cb]
+         */
+
+    }, {
+        key: 'addChildren',
+        value: function addChildren(container, count, tagName) {
+            var cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
+
+            for (var i = 0; i < count; i++) {
+                var child = document.createElement(tagName);
+                container.appendChild(child);
+                if (cb) {
+                    cb(child, i);
+                }
+            }
+        }
+    }]);
+
+    return LayerMask;
+}();
+
+module.exports = LayerMask;
 
 /***/ }),
 /* 3 */
@@ -232,7 +423,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var uniq = __webpack_require__(10);
+var uniq = __webpack_require__(8);
 
 /**
  * @name ClientRect
@@ -397,253 +588,6 @@ module.exports = {
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var utils = __webpack_require__(9);
-
-var LayerMask = function () {
-    _createClass(LayerMask, null, [{
-        key: 'defaults',
-
-
-        /**
-         * @typedef {Object} LayerMaskConfig
-         *
-         * @property {boolean} [debug]
-         * @property {number} [padding]
-         * @property {string} [classes]
-         * @property {string} [classesCanvas]
-         * @property {string} [classesSvg]
-         * @property {string} [classesFixed]
-         * @property {string} [classesTable]
-         * @property {string} [classesTableRow]
-         * @property {string} [classesTableCell]
-         * @property {string} [classesTableCellHole]
-         * @property {string} [classesDebug]
-         *
-         *
-         * @static
-         * @return {LayerMaskConfig}
-         */
-        get: function get() {
-            return {
-                debug: false,
-                padding: 0,
-                classes: 'layer-mask',
-                classesDebug: 'layer-mask--debug',
-                classesTable: 'layer-mask-table',
-                classesTableRow: 'layer-mask-table__row',
-                classesTableCell: 'layer-mask-table__cell',
-                classesTableCellHole: 'layer-mask-table__cell--hole',
-                classesCanvas: 'layer-mask--canvas',
-                classesSvg: 'layer-mask--svg',
-                classesFixed: 'layer-mask--fixed'
-            };
-        }
-
-        /**
-         * @param {NodeList|Element} elements
-         * @param {LayerMaskConfig} config
-         */
-
-    }]);
-
-    function LayerMask(elements, config) {
-        _classCallCheck(this, LayerMask);
-
-        this.config = Object.assign({}, this.constructor.defaults, config);
-        this.elements = elements.length ? [].slice.call(elements) : [elements];
-    }
-
-    /**
-     * @public
-     * @return {Element}
-     */
-
-
-    _createClass(LayerMask, [{
-        key: 'createMask',
-        value: function createMask() {
-            var _this = this;
-
-            var isFixed = utils.isElementFixed(this.elements[0]);
-            var canvasDimension = isFixed ? utils.getWindowDimensions() : utils.getPageDimensions();
-
-            var rectangles = utils.getAllBoundaries(this.elements).map(function (rect) {
-                return utils.addPadding(rect, _this.config.padding);
-            }).map(function (rect) {
-                return utils.addPageOffset(rect, isFixed);
-            });
-
-            return this.buildMask(canvasDimension, isFixed, rectangles);
-        }
-
-        /**
-         * @private
-         * @param {Dimension} canvasDimension
-         * @param {Boolean} isFixed
-         * @param {Array.<ClientRect>} rectangles
-         * @return {Element}
-         */
-
-    }, {
-        key: 'buildMask',
-        value: function buildMask(canvasDimension, isFixed, rectangles) {
-            throw new Error('not implemented');
-        }
-    }]);
-
-    return LayerMask;
-}();
-
-module.exports = LayerMask;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _require = __webpack_require__(1),
-    Point = _require.Point,
-    Vector = _require.Vector,
-    ClientRect = _require.ClientRect;
-
-var LayerMask = __webpack_require__(7);
-
-var TableMaskCreator = function (_LayerMask) {
-    _inherits(TableMaskCreator, _LayerMask);
-
-    function TableMaskCreator() {
-        _classCallCheck(this, TableMaskCreator);
-
-        return _possibleConstructorReturn(this, (TableMaskCreator.__proto__ || Object.getPrototypeOf(TableMaskCreator)).apply(this, arguments));
-    }
-
-    _createClass(TableMaskCreator, [{
-        key: 'buildMask',
-
-
-        /**
-         * @private
-         * @param {Dimension} canvasDimension
-         * @param {Boolean} isFixed
-         * @param {Array.<ClientRect>} rectangles
-         * @return {Element}
-         */
-        value: function buildMask(canvasDimension, isFixed, rectangles) {
-            var _this2 = this;
-
-            var colPositions = ClientRect.mapVertexesToAxisX(rectangles);
-            var rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
-
-            var container = document.createElement('div');
-
-            container.style.width = this.px(canvasDimension.width);
-            container.style.height = this.px(canvasDimension.height);
-
-            if (this.config.debug) {
-                container.classList.add(this.config.classesDebug);
-            }
-
-            this.addChildren(container, rowPositions.length, 'div', function (row, i) {
-                var rowInitial = rowPositions[i];
-                var rowTerminal = rowPositions[i + 1];
-
-                row.classList.add(_this2.config.classesTableRow);
-                if (rowTerminal) {
-                    row.style.height = _this2.px(rowTerminal - rowInitial);
-                }
-
-                _this2.addChildren(row, colPositions.length, 'div', function (cell, j) {
-                    var colInitial = colPositions[j];
-                    var colTerminal = colPositions[j + 1];
-
-                    cell.classList.add(_this2.config.classesTableCell);
-                    if (colTerminal) {
-                        cell.style.width = _this2.px(colTerminal - colInitial);
-                    }
-
-                    if (rowTerminal !== undefined && colTerminal !== undefined) {
-                        var initialPoint = new Point(colInitial, rowInitial);
-                        var terminalPoint = new Point(colTerminal, rowTerminal);
-                        var vector = new Vector(initialPoint, terminalPoint);
-
-                        if (rectangles.some(function (r) {
-                            return r.isVectorCollides(vector);
-                        })) {
-                            cell.classList.add(_this2.config.classesTableCellHole);
-                        }
-                    }
-                });
-            });
-
-            container.classList.add(this.config.classes, this.config.classesTable);
-            if (isFixed) {
-                container.classList.add(this.config.classesFixed);
-            }
-
-            return container;
-        }
-
-        /**
-         * @private
-         * @param {number} value
-         * @return {string}
-         */
-
-    }, {
-        key: 'px',
-        value: function px(value) {
-            return value + 'px';
-        }
-
-        /**
-         * @private
-         * @param {Element} container
-         * @param {number} count
-         * @param {string} tagName
-         * @param {?Function} [cb]
-         */
-
-    }, {
-        key: 'addChildren',
-        value: function addChildren(container, count, tagName) {
-            var cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
-
-            for (var i = 0; i < count; i++) {
-                var child = document.createElement(tagName);
-                container.appendChild(child);
-                if (cb) {
-                    cb(child, i);
-                }
-            }
-        }
-    }]);
-
-    return TableMaskCreator;
-}(LayerMask);
-
-module.exports = TableMaskCreator;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _require = __webpack_require__(1),
     ClientRect = _require.ClientRect;
 
@@ -788,7 +732,7 @@ function addPageOffset(rectangular, isFixed) {
 }
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
