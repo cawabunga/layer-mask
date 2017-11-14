@@ -2,7 +2,10 @@ Layer Mask [![Build Status](https://travis-ci.org/cawabunga/layer-mask.svg?branc
 ===
 
 The javascript library for creation an overlay that covers the whole page except selected elements on the page.
-You can find a little [live demo here](https://cawabunga.github.io/layer-mask/). 
+
+Live demo:
+- [basic usage](https://cawabunga.github.io/layer-mask/)
+- [demo integration](https://cawabunga.github.io/layer-mask/tour.html) with [Shepherd](https://github.com/HubSpot/shepherd)
 
 Here are useful cases: 
 - allow/disallow clicking the specific elements on the page

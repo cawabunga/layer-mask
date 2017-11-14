@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shepherd Example</title>
+  <link rel="stylesheet" href="./vendor/shepherd/shepherd-theme-arrows.css">
+  <link rel="stylesheet" href="./lib/layer-mask.css">
+
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    #block-1 {
+      width: 30%;
+      margin: auto;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .col {
+      flex: 0 0 40%;
+    }
+
+    /* Fix overlapping */
+    .shepherd-element {
+      z-index: 10; /* should overlap the layer mask */
+    }
+
+    .layer-mask {
+      z-index: 9;
+    }
+
+    /* Overlay */
+    .layer-mask-table__cell {
+      background: rgba(0, 0, 0, .3);
+    }
+
+    .layer-mask-table__cell--hole {
+      background: none;
+    }
+
+  </style>
+</head>
+<body>
+
+<button id="starter">Start Tour</button>
+
+
+<div id="block-1">
+  <h4>Почему мгновенно полнолуние?</h4>
+
+  <p>
+    Солнечное затмение иллюстрирует эллиптический часовой угол. Противостояние колеблет межпланетный астероид. Зенитное
+    часовое число иллюстрирует космический лимб. Лимб пространственно выбирает межпланетный метеорит. Эклиптика
+    однородно перечеркивает аргумент перигелия.
+  </p>
+
+  <p>
+    Земная группа формировалась ближе к Солнцу, однако небесная сфера дает межпланетный керн. Pадиотелескоп Максвелла
+    ищет дип-скай объект. Расстояния планет от Солнца возрастают приблизительно в геометрической прогрессии (правило
+    Тициуса — Боде): г = 0,4 + 0,3 · 2n (а.е.), где магнитное поле непрерывно. Газопылевое облако, в первом
+    приближении, гасит перигей.
+  </p>
+</div>
+
+<div class="row">
+  <div class="col">
+
+    <h4>Циркулирующий луч: гипотеза и теории</h4>
+
+    <p id="block-2">
+      Гравитирующая сфера восстанавливает тангенциальный кварк, в итоге возможно появление обратной связи и
+      самовозбуждение системы. Лептон нейтрализует экситон, однозначно свидетельствуя о неустойчивости процесса в целом.
+      Кристалл искажает плоскополяризованный атом. Квант, даже при наличии сильных аттракторов, восстанавливает
+      квантовый объект, поскольку любое другое поведение нарушало бы изотропность пространства. Резонатор переворачивает
+      элементарный вихрь.
+    </p>
+
+    <p>
+      Непосредственно из законов сохранения следует, что вселенная переворачивает нестационарный вихрь. Темная материя
+      отталкивает магнит. Расслоение, как и везде в пределах наблюдаемой вселенной, бифокально масштабирует луч. Взвесь
+      недетерминировано возбуждает нестационарный экситон. Многочисленные расчеты предсказывают, а эксперименты
+      подтверждают, что поверхность отталкивает объект. При наступлении резонанса пульсар усиливает газ.
+    </p>
+
+  </div>
+  <div class="col">
+
+    <img src="./images/cat.jpeg" alt="cat" id="block-3" style="max-width: 500px" />
+
+  </div>
+</div>
+
+
+<script src="./vendor/tether/tether.js"></script>
+<script src="./vendor/shepherd/shepherd.js"></script>
+<script src="./lib/layer-mask.js"></script>
+<script>
+(function () {
+  var layerMaskManager = new layerMask.LayerMaskManager(document.body);
+  var layerMaskDefaults = { classes: 'layer-mask' };
+
+  var stepDefaults = {
+    classes: 'shepherd-theme-arrows',
+    when: {
+      show: function () {
+        var step = this;
+
+        // Spotlight
+        var attachedElement = step.tether.target,
+            layerMaskInstance = new layerMask.LayerMask(attachedElement, layerMaskDefaults);
+        layerMaskManager.revealMask(layerMaskInstance);
+      },
+      hide: function () {
+        var step = this;
+
+        // Don't forget to remove just added mask
+
+        // Shepherd has a annoying bug, 'hide' event is being called multiple times
+        // So checking for mask element is required
+        if (layerMaskManager.activeMaskElement) {
+          layerMaskManager.hideActiveMask();
+        }
+      }
+    }
+  };
+
+  var stepDescriptors = [
+    {
+      title: 'Step 1',
+      attachTo: '#block-1 bottom',
+      text: 'Integer volutpat lectus purus, et mattis tellus sodales et.'
+    },
+    {
+      title: 'Step 2',
+      attachTo: '#block-2 top',
+      text: 'Nullam nec lorem vel lectus dictum tincidunt.'
+    },
+    {
+      title: 'Step 3',
+      attachTo: '#block-3 right',
+      text: 'Nam dolor augue, iaculis vel nibh sed, mattis suscipit orci.'
+    }
+  ];
+
+  function createTour(stepDefaults, stepDescriptors) {
+    var tour = new Shepherd.Tour({ defaults: stepDefaults });
+
+    stepDescriptors.forEach(function (descriptor) {
+      tour.addStep(descriptor);
+    });
+
+    return tour;
+  }
+
+  document.querySelector('#starter').onclick = function () {
+    var tour = createTour(stepDefaults, stepDescriptors);
+    tour.start();
+  };
+}());
+</script>
+</body>
+</html>
