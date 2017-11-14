@@ -1,3 +1,4 @@
+const _ = require('./utils/_');
 const domUtils = require('./utils/dom');
 const { Point, Vector, ClientRect } = require('./dataTypes');
 
@@ -60,7 +61,7 @@ class LayerMask {
             .map(rect => domUtils.addPageOffset(rect, isFixed));
 
         const containerElement = this.buildContainer(canvasDimension, isFixed);
-        this.appendMask(containerElement, rectangles);
+        this.appendMask(containerElement, rectangles, canvasDimension);
 
         return containerElement;
     }
@@ -92,42 +93,55 @@ class LayerMask {
      * @private
      * @param {Element} container
      * @param {Array.<ClientRect>} rectangles
+     * @param {Dimension} canvasDimension
      * @return {Element}
      */
-    appendMask(container, rectangles) {
+    appendMask(container, rectangles, canvasDimension) {
         domUtils.addClasses(container, this.config.classesTable);
 
-        const colPositions = ClientRect.mapVertexesToAxisX(rectangles);
-        const rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
+        const p0 = new Point(0, 0);
+        const pN = new Point(canvasDimension.width, canvasDimension.height);
 
-        this.addChildren(container, rowPositions.length, 'div', (row, i) => {
+        const vertexes = ClientRect.getVertexes(rectangles);
+        const points = [p0, pN].concat(...vertexes);
+
+        const colPositions = Point.mapX(points);
+        const rowPositions = Point.mapY(points);
+
+        const rowsCount = rowPositions.length - 1;
+        const colsCount = colPositions.length - 1;
+
+        const rows = this.buildTable(rowsCount, colsCount);
+
+        _.forEach(rows, (rowEl, i) => {
+            domUtils.addClasses(rowEl, this.config.classesTableRow);
+
             const rowInitial = rowPositions[i];
             const rowTerminal = rowPositions[i + 1];
 
-            domUtils.addClasses(row, this.config.classesTableRow);
-            if (rowTerminal) {
-                row.style.height = `${rowTerminal - rowInitial}px`;
-            }
+            rowEl.style.height = `${rowTerminal - rowInitial}px`;
 
-            this.addChildren(row, colPositions.length, 'div', (cell, j) => {
+            _.forEach(rowEl.childNodes, (cellEl, j) => {
+                domUtils.addClasses(cellEl, this.config.classesTableCell);
+
                 const colInitial = colPositions[j];
                 const colTerminal = colPositions[j + 1];
 
-                domUtils.addClasses(cell, this.config.classesTableCell);
-                if (colTerminal) {
-                    cell.style.width = `${colTerminal - colInitial}px`;
-                }
+                cellEl.style.width = `${colTerminal - colInitial}px`;
 
-                if (rowTerminal !== undefined && colTerminal !== undefined) {
-                    const initialPoint = new Point(colInitial, rowInitial);
-                    const terminalPoint = new Point(colTerminal, rowTerminal);
-                    const vector = new Vector(initialPoint, terminalPoint);
+                // Check collision
+                const initialPoint = new Point(colInitial, rowInitial);
+                const terminalPoint = new Point(colTerminal, rowTerminal);
+                const vector = new Vector(initialPoint, terminalPoint);
 
-                    if (rectangles.some(r => r.isVectorCollides(vector))) {
-                        domUtils.addClasses(cell, this.config.classesTableCellHole);
-                    }
+                if (rectangles.some(r => r.isVectorCollides(vector))) {
+                    domUtils.addClasses(cellEl, this.config.classesTableCellHole);
                 }
             });
+        });
+
+        _.forEach(rows, (el, i) => {
+            container.appendChild(el);
         });
 
         return container;
@@ -135,19 +149,24 @@ class LayerMask {
 
     /**
      * @private
-     * @param {Element} container
-     * @param {number} count
-     * @param {string} tagName
-     * @param {?Function} [cb]
+     * @param {number} rowsCount
+     * @param {number} colsCount
+     * @return {Array.<Element>}
      */
-    addChildren(container, count, tagName, cb = undefined) {
-        for (let i = 0; i < count; i++) {
-            const child = document.createElement(tagName);
-            container.appendChild(child);
-            if (cb) {
-                cb(child, i);
+    buildTable(rowsCount, colsCount) {
+        const rows = [];
+
+        for (let i = 0; i < rowsCount; i++) {
+            const rowEl = document.createElement('div');
+            rows.push(rowEl);
+
+            for (let j = 0; j < colsCount; j++) {
+                const cellEl = document.createElement('div');
+                rowEl.appendChild(cellEl);
             }
         }
+
+        return rows;
     }
 
 }

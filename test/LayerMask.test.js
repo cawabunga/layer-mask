@@ -101,7 +101,6 @@ describe('LayerMask', () => {
                 expect(clientRect0.left).toEqual(clientRect.left);
                 expect(clientRect0.top).toEqual(clientRect.top);
                 expect(clientRect0.width).toEqual(clientRect.width);
-                expect(clientRect0.height).toEqual(clientRect.height);
             });
 
             it('cell that covers the element should has class', () => {

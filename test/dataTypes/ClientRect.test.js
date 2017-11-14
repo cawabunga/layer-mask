@@ -8,6 +8,16 @@ describe('ClientRect', () => {
         expect(ClientRect).toEqual(jasmine.any(Function));
     });
 
+    it('.getVertexes(): should return all vertexes', () => {
+        const c1 = new ClientRect(10, 0, 15, 0, 200, 250);
+        const c2 = new ClientRect(20, 0, 25, 0, 300, 350);
+
+        const result = ClientRect.getVertexes([c1, c2]);
+
+        expect(result).toEqual(jasmine.any(Array));
+        expect(result.length).toEqual(8);
+    });
+
     describe('instance', () => {
 
         let clientRect, left, width, top, height;
@@ -64,5 +74,18 @@ describe('ClientRect', () => {
             expect(clientRect.isVectorCollides(boundaryVector)).toEqual(true);
             expect(clientRect.isVectorCollides(mixedVector)).toEqual(false);
         });
+
+        it('#getVertexes(): should return all 4 vertexes', () => {
+            const vertexes = clientRect.getVertexes();
+
+            expect(vertexes).toEqual(jasmine.any(Array));
+            expect(vertexes.length).toEqual(4);
+
+            expect(vertexes[0]).toEqual(jasmine.objectContaining({ x: 10, y: 20 }));
+            expect(vertexes[1]).toEqual(jasmine.objectContaining({ x: 15, y: 20 }));
+            expect(vertexes[2]).toEqual(jasmine.objectContaining({ x: 15, y: 27 }));
+            expect(vertexes[3]).toEqual(jasmine.objectContaining({ x: 10, y: 27 }));
+        });
+
     });
 });

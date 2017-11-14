@@ -1,7 +1,9 @@
-const uniq = require('../utils/uniq');
+const _ = require('../utils/_');
+const Point = require('./Point');
 
 /**
  * @name ClientRect
+ * @descr It is similar to an abstract Rectangle class, but with inverted Y axis
  */
 class ClientRect {
 
@@ -47,23 +49,25 @@ class ClientRect {
     }
 
     /**
-     * @static
-     * @param {Array.<ClientRect>} rectangles
-     * @returns {Array.<number>}
+     * @public
+     * @returns {Array.<Point>} Points are in the clockwise order
      */
-    static mapVertexesToAxisX(rectangles) {
-        const abscissas = rectangles.reduce((memo, r) =>  memo.concat([r.left, r.left + r.width]), [0]);
-        return uniq(abscissas).sort((a, b) => a - b);
+    getVertexes() {
+        return [
+            new Point(this.left, this.top),
+            new Point(this.left + this.width, this.top),
+            new Point(this.left + this.width, this.top + this.height),
+            new Point(this.left, this.top + this.height),
+        ];
     }
 
     /**
      * @static
      * @param {Array.<ClientRect>} rectangles
-     * @returns {Array.<number>}
      */
-    static mapVertexesToAxisY(rectangles) {
-        const ordinates = rectangles.reduce((memo, r) =>  memo.concat([r.top, r.top + r.height]), [0]);
-        return uniq(ordinates).sort((a, b) => a - b);
+    static getVertexes(rectangles) {
+        const vertexes = rectangles.map(r => r.getVertexes());
+        return _.flatten(vertexes);
     }
 
 }
