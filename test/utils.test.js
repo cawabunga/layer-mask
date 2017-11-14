@@ -1,5 +1,5 @@
 describe('utils', () => {
-    const utils = require('../src/utils');
+    const utils = require('../src/utils/dom');
 
     it('should be an object', () => {
         expect(utils).toEqual(jasmine.objectContaining({

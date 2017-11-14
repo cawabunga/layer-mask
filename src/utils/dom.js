@@ -7,6 +7,7 @@ module.exports = {
     getAllBoundaries,
     addPadding,
     addPageOffset,
+    addClasses,
 };
 
 /**
@@ -136,4 +137,13 @@ function addPageOffset(rectangular, isFixed) {
     const height = rectangular.height;
 
     return new ClientRect(left, right, top, bottom, width, height);
+}
+
+/**
+ * @param {Element} element
+ * @param {string} classes
+ */
+function addClasses(element, classes) {
+    const classArr = classes.split(' ');
+    element.classList.add(...classArr);
 }

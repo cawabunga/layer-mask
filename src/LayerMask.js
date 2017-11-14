@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const domUtils = require('./utils/dom');
 const { Point, Vector, ClientRect } = require('./dataTypes');
 
 class LayerMask {
@@ -52,52 +52,70 @@ class LayerMask {
      * @return {Element}
      */
     createMask() {
-        const isFixed = utils.isElementFixed(this.elements[0]);
-        const canvasDimension = isFixed ? utils.getWindowDimensions() : utils.getPageDimensions();
+        const isFixed = domUtils.isElementFixed(this.elements[0]);
+        const canvasDimension = isFixed ? domUtils.getWindowDimensions() : domUtils.getPageDimensions();
 
-        const rectangles = utils.getAllBoundaries(this.elements)
-            .map(rect => utils.addPadding(rect, this.config.padding))
-            .map(rect => utils.addPageOffset(rect, isFixed));
+        const rectangles = domUtils.getAllBoundaries(this.elements)
+            .map(rect => domUtils.addPadding(rect, this.config.padding))
+            .map(rect => domUtils.addPageOffset(rect, isFixed));
 
-        return this.buildMask(canvasDimension, isFixed, rectangles);
+        const containerElement = this.buildContainer(canvasDimension, isFixed);
+        this.appendMask(containerElement, rectangles);
+
+        return containerElement;
     }
 
     /**
      * @private
      * @param {Dimension} canvasDimension
      * @param {Boolean} isFixed
+     * @return {Element}
+     */
+    buildContainer(canvasDimension, isFixed) {
+        const container = document.createElement('div');
+
+        container.style.width = `${canvasDimension.width}px`;
+        container.style.height = `${canvasDimension.height}px`;
+
+        domUtils.addClasses(container, this.config.classes);
+        if (isFixed) {
+            domUtils.addClasses(container, this.config.classesFixed);
+        }
+        if (this.config.debug) {
+            domUtils.addClasses(container, this.config.classesDebug);
+        }
+
+        return container;
+    }
+
+    /**
+     * @private
+     * @param {Element} container
      * @param {Array.<ClientRect>} rectangles
      * @return {Element}
      */
-    buildMask(canvasDimension, isFixed, rectangles) {
+    appendMask(container, rectangles) {
+        domUtils.addClasses(container, this.config.classesTable);
+
         const colPositions = ClientRect.mapVertexesToAxisX(rectangles);
         const rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
-
-        const container = document.createElement('div');
-
-        container.style.width = this.px(canvasDimension.width);
-        container.style.height = this.px(canvasDimension.height);
-
-        if (this.config.debug) {
-            container.classList.add(this.config.classesDebug);
-        }
 
         this.addChildren(container, rowPositions.length, 'div', (row, i) => {
             const rowInitial = rowPositions[i];
             const rowTerminal = rowPositions[i + 1];
 
-            row.classList.add(this.config.classesTableRow);
+            domUtils.addClasses(row, this.config.classesTableRow);
             if (rowTerminal) {
-                row.style.height = this.px(rowTerminal - rowInitial);
+                row.style.height = `${rowTerminal - rowInitial}px`;
             }
 
             this.addChildren(row, colPositions.length, 'div', (cell, j) => {
                 const colInitial = colPositions[j];
                 const colTerminal = colPositions[j + 1];
 
-                cell.classList.add(this.config.classesTableCell);
+                domUtils.addClasses(cell, this.config.classesTableCell);
                 if (colTerminal) {
-                    cell.style.width = this.px(colTerminal - colInitial);
+                    cell.style.width = `${colTerminal - colInitial}px`;
                 }
 
                 if (rowTerminal !== undefined && colTerminal !== undefined) {
@@ -106,27 +124,13 @@ class LayerMask {
                     const vector = new Vector(initialPoint, terminalPoint);
 
                     if (rectangles.some(r => r.isVectorCollides(vector))) {
-                        cell.classList.add(this.config.classesTableCellHole);
+                        domUtils.addClasses(cell, this.config.classesTableCellHole);
                     }
                 }
             });
         });
 
-        container.classList.add(this.config.classes, this.config.classesTable);
-        if (isFixed) {
-            container.classList.add(this.config.classesFixed);
-        }
-
         return container;
-    }
-
-    /**
-     * @private
-     * @param {number} value
-     * @return {string}
-     */
-    px(value) {
-        return `${value}px`;
     }
 
     /**
