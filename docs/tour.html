@@ -30,16 +30,16 @@
       z-index: 10; /* should overlap the layer mask */
     }
 
-    .layer-mask {
+    .my-spotlight {
       z-index: 9;
     }
 
     /* Overlay */
-    .layer-mask-table__cell {
+    .my-spotlight .layer-mask-table__cell {
       background: rgba(0, 0, 0, .3);
     }
 
-    .layer-mask-table__cell--hole {
+    .my-spotlight .layer-mask-table__cell--hole {
       background: none;
     }
 
@@ -102,7 +102,7 @@
 <script>
 (function () {
   var layerMaskManager = new layerMask.LayerMaskManager(document.body);
-  var layerMaskDefaults = { classes: 'layer-mask' };
+  var layerMaskDefaults = { classes: 'layer-mask my-spotlight' };
 
   var stepDefaults = {
     classes: 'shepherd-theme-arrows',

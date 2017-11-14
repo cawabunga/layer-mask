@@ -127,7 +127,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var utils = __webpack_require__(7);
+var domUtils = __webpack_require__(7);
 
 var _require = __webpack_require__(1),
     Point = _require.Point,
@@ -199,59 +199,80 @@ var LayerMask = function () {
         value: function createMask() {
             var _this = this;
 
-            var isFixed = utils.isElementFixed(this.elements[0]);
-            var canvasDimension = isFixed ? utils.getWindowDimensions() : utils.getPageDimensions();
+            var isFixed = domUtils.isElementFixed(this.elements[0]);
+            var canvasDimension = isFixed ? domUtils.getWindowDimensions() : domUtils.getPageDimensions();
 
-            var rectangles = utils.getAllBoundaries(this.elements).map(function (rect) {
-                return utils.addPadding(rect, _this.config.padding);
+            var rectangles = domUtils.getAllBoundaries(this.elements).map(function (rect) {
+                return domUtils.addPadding(rect, _this.config.padding);
             }).map(function (rect) {
-                return utils.addPageOffset(rect, isFixed);
+                return domUtils.addPageOffset(rect, isFixed);
             });
 
-            return this.buildMask(canvasDimension, isFixed, rectangles);
+            var containerElement = this.buildContainer(canvasDimension, isFixed);
+            this.appendMask(containerElement, rectangles);
+
+            return containerElement;
         }
 
         /**
          * @private
          * @param {Dimension} canvasDimension
          * @param {Boolean} isFixed
+         * @return {Element}
+         */
+
+    }, {
+        key: 'buildContainer',
+        value: function buildContainer(canvasDimension, isFixed) {
+            var container = document.createElement('div');
+
+            container.style.width = canvasDimension.width + 'px';
+            container.style.height = canvasDimension.height + 'px';
+
+            domUtils.addClasses(container, this.config.classes);
+            if (isFixed) {
+                domUtils.addClasses(container, this.config.classesFixed);
+            }
+            if (this.config.debug) {
+                domUtils.addClasses(container, this.config.classesDebug);
+            }
+
+            return container;
+        }
+
+        /**
+         * @private
+         * @param {Element} container
          * @param {Array.<ClientRect>} rectangles
          * @return {Element}
          */
 
     }, {
-        key: 'buildMask',
-        value: function buildMask(canvasDimension, isFixed, rectangles) {
+        key: 'appendMask',
+        value: function appendMask(container, rectangles) {
             var _this2 = this;
+
+            domUtils.addClasses(container, this.config.classesTable);
 
             var colPositions = ClientRect.mapVertexesToAxisX(rectangles);
             var rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
-
-            var container = document.createElement('div');
-
-            container.style.width = this.px(canvasDimension.width);
-            container.style.height = this.px(canvasDimension.height);
-
-            if (this.config.debug) {
-                container.classList.add(this.config.classesDebug);
-            }
 
             this.addChildren(container, rowPositions.length, 'div', function (row, i) {
                 var rowInitial = rowPositions[i];
                 var rowTerminal = rowPositions[i + 1];
 
-                row.classList.add(_this2.config.classesTableRow);
+                domUtils.addClasses(row, _this2.config.classesTableRow);
                 if (rowTerminal) {
-                    row.style.height = _this2.px(rowTerminal - rowInitial);
+                    row.style.height = rowTerminal - rowInitial + 'px';
                 }
 
                 _this2.addChildren(row, colPositions.length, 'div', function (cell, j) {
                     var colInitial = colPositions[j];
                     var colTerminal = colPositions[j + 1];
 
-                    cell.classList.add(_this2.config.classesTableCell);
+                    domUtils.addClasses(cell, _this2.config.classesTableCell);
                     if (colTerminal) {
-                        cell.style.width = _this2.px(colTerminal - colInitial);
+                        cell.style.width = colTerminal - colInitial + 'px';
                     }
 
                     if (rowTerminal !== undefined && colTerminal !== undefined) {
@@ -262,30 +283,13 @@ var LayerMask = function () {
                         if (rectangles.some(function (r) {
                             return r.isVectorCollides(vector);
                         })) {
-                            cell.classList.add(_this2.config.classesTableCellHole);
+                            domUtils.addClasses(cell, _this2.config.classesTableCellHole);
                         }
                     }
                 });
             });
 
-            container.classList.add(this.config.classes, this.config.classesTable);
-            if (isFixed) {
-                container.classList.add(this.config.classesFixed);
-            }
-
             return container;
-        }
-
-        /**
-         * @private
-         * @param {number} value
-         * @return {string}
-         */
-
-    }, {
-        key: 'px',
-        value: function px(value) {
-            return value + 'px';
         }
 
         /**
@@ -588,6 +592,8 @@ module.exports = {
 "use strict";
 
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var _require = __webpack_require__(1),
     ClientRect = _require.ClientRect;
 
@@ -597,7 +603,8 @@ module.exports = {
     isElementFixed: isElementFixed,
     getAllBoundaries: getAllBoundaries,
     addPadding: addPadding,
-    addPageOffset: addPageOffset
+    addPageOffset: addPageOffset,
+    addClasses: addClasses
 };
 
 /**
@@ -729,6 +736,17 @@ function addPageOffset(rectangular, isFixed) {
     var height = rectangular.height;
 
     return new ClientRect(left, right, top, bottom, width, height);
+}
+
+/**
+ * @param {Element} element
+ * @param {string} classes
+ */
+function addClasses(element, classes) {
+    var _element$classList;
+
+    var classArr = classes.split(' ');
+    (_element$classList = element.classList).add.apply(_element$classList, _toConsumableArray(classArr));
 }
 
 /***/ }),
