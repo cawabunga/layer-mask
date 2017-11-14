@@ -36,7 +36,7 @@
 <script src="../serve/layer-mask.js"></script>
 <script>
     (function () {
-        const manager = new layerMask.MaskManager(document.querySelector('body'));
+        const manager = new layerMask.LayerMaskManager(document.querySelector('body'));
         const mask = new layerMask.LayerMask(document.querySelectorAll('#link-1, #link-2'), { debug: true });
         manager.revealMask(mask);
     }());

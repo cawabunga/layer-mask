@@ -1,9 +1,9 @@
 
-describe('MaskManager', () => {
-    const MaskManager = require('../src/MaskManager');
+describe('LayerMaskManager', () => {
+    const LayerMaskManager = require('../src/LayerMaskManager');
 
     it('should be a function', () => {
-        expect(MaskManager).toEqual(jasmine.any(Function));
+        expect(LayerMaskManager).toEqual(jasmine.any(Function));
     });
 
     describe('instance', () => {
@@ -12,7 +12,7 @@ describe('MaskManager', () => {
 
         beforeEach(() => {
             container = document.querySelector('body');
-            maskManager = new MaskManager(container);
+            maskManager = new LayerMaskManager(container);
 
             layerMaskElement = document.createElement('div');
             layerMaskMock = {

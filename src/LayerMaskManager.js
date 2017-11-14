@@ -1,5 +1,5 @@
 
-class MaskManager {
+class LayerMaskManager {
 
     /**
      * @param {Element} container
@@ -65,4 +65,4 @@ class MaskManager {
 
 }
 
-module.exports = MaskManager;
+module.exports = LayerMaskManager;

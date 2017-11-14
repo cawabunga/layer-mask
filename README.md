@@ -17,7 +17,7 @@ Some details about the library:
 `$ npm install layer-mask`
 
 ### Documentation
-Please see the source code of [LayerMask](src/maskCreators/LayerMask.js) and [MaskManager](src/MaskManager.js).
+Please see the source code of [LayerMask](src/maskCreators/LayerMask.js) and [LayerMaskManager](src/LayerMaskManager.js).
 
 ### Usage
 Direct usage:
@@ -33,10 +33,10 @@ document.querySelector('body').appendChild(maskElement);
 
 Using the mask manager:
 ```javascript
-const { MaskManager, LayerMask } = require('layer-mask');
+const { LayerMaskManager, LayerMask } = require('layer-mask');
 
 const container = document.querySelector('body');
-const maskManager = new MaskManager(container);
+const maskManager = new LayerMaskManager(container);
 
 const mask = new LayerMask(document.querySelectorAll('#link-1, #link-2'));
 const maskElement = maskManager.revealMask(mask);
