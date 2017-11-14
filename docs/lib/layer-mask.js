@@ -136,13 +136,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var MaskManager = function () {
+var LayerMaskManager = function () {
 
     /**
      * @param {Element} container
      */
-    function MaskManager(container) {
-        _classCallCheck(this, MaskManager);
+    function LayerMaskManager(container) {
+        _classCallCheck(this, LayerMaskManager);
 
         this._container = container;
         this.currentLayerMask = undefined;
@@ -156,7 +156,7 @@ var MaskManager = function () {
      */
 
 
-    _createClass(MaskManager, [{
+    _createClass(LayerMaskManager, [{
         key: 'revealMask',
         value: function revealMask(layerMask) {
             if (this.activeMaskElement) {
@@ -216,10 +216,10 @@ var MaskManager = function () {
         }
     }]);
 
-    return MaskManager;
+    return LayerMaskManager;
 }();
 
-module.exports = MaskManager;
+module.exports = LayerMaskManager;
 
 /***/ }),
 /* 4 */
@@ -387,7 +387,7 @@ module.exports = Vector;
 
 module.exports = {
     LayerMask: __webpack_require__(2),
-    MaskManager: __webpack_require__(3)
+    LayerMaskManager: __webpack_require__(3)
 };
 
 /***/ }),
