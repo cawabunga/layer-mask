@@ -3,41 +3,19 @@
     top: 0;
     left: 0;
     background: transparent;
-    z-index: 9998;
-    pointer-events: none;
+    z-index: 9998; /* Don't forget to override according to your css */
 }
+
 .layer-mask--fixed {
     position: fixed;
 }
-.layer-mask--canvas {
-    opacity: .5;
-    pointer-events: painted;
+
+.layer-mask-table__row {
+    display: table-row;
 }
 
-.layer-mask-table {
-    display: flex;
-    flex-direction: column;
-}
-.layer-mask-table__row,
 .layer-mask-table__cell {
-    display: flex;
-    flex: 0 0 auto;
-}
-.layer-mask-table__row:last-child,
-.layer-mask-table__cell:last-child {
-    flex: 1 0 auto;
-}
-
-.layer-mask-table,
-.layer-mask-table,
-.layer-mask-table__cell {
-    pointer-events: none;
-}
-.layer-mask-table__cell {
-    pointer-events: auto;
-}
-.layer-mask-table__cell--hole {
-    pointer-events: none;
+    display: table-cell;
 }
 
 .layer-mask--debug .layer-mask-table__cell {

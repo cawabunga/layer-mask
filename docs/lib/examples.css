@@ -1,0 +1,32 @@
+
+/**
+ * Allow clicking only through the holes
+ */
+
+.clicking-example,
+.clicking-example .layer-mask-table__row {
+    pointer-events: none;
+}
+
+.clicking-example .layer-mask-table__cell {
+    pointer-events: auto;
+}
+
+.clicking-example .layer-mask-table__cell--hole {
+    pointer-events: none;
+}
+
+
+/**
+ * Set a spotlight focus on a target element
+ */
+
+.spotlight-example {}
+
+.spotlight-example .layer-mask-table__cell {
+    background: rgba(0, 0, 0, .5);
+}
+
+.spotlight-example .layer-mask-table__cell--hole {
+    background: none;
+}

@@ -5,6 +5,7 @@
   <title>Shepherd Example</title>
   <link rel="stylesheet" href="./vendor/shepherd/shepherd-theme-arrows.css">
   <link rel="stylesheet" href="./lib/layer-mask.css">
+  <link rel="stylesheet" href="./lib/examples.css">
 
   <style>
     body {
@@ -30,17 +31,8 @@
       z-index: 10; /* should overlap the layer mask */
     }
 
-    .my-spotlight {
+    .spotlight-example {
       z-index: 9;
-    }
-
-    /* Overlay */
-    .my-spotlight .layer-mask-table__cell {
-      background: rgba(0, 0, 0, .3);
-    }
-
-    .my-spotlight .layer-mask-table__cell--hole {
-      background: none;
     }
 
   </style>
@@ -102,7 +94,7 @@
 <script>
 (function () {
   var layerMaskManager = new layerMask.LayerMaskManager(document.body);
-  var layerMaskDefaults = { classes: 'layer-mask my-spotlight' };
+  var layerMaskDefaults = { classes: 'layer-mask spotlight-example clicking-example' };
 
   var stepDefaults = {
     classes: 'shepherd-theme-arrows',

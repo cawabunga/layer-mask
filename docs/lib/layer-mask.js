@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,23 +83,67 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _ = __webpack_require__(1);
 
 /**
  * @name Point
  */
-var Point =
 
-/**
- * @param {number} x
- * @param {number} y
- */
-function Point(x, y) {
-  _classCallCheck(this, Point);
+var Point = function () {
 
-  this.x = x;
-  this.y = y;
-};
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
+  function Point(x, y) {
+    _classCallCheck(this, Point);
+
+    this.x = x;
+    this.y = y;
+  }
+
+  /**
+   * @static
+   * @param {Array.<Point>} points
+   * @returns {Array.<number>}
+   */
+
+
+  _createClass(Point, null, [{
+    key: 'mapX',
+    value: function mapX(points) {
+      var positions = points.map(function (p) {
+        return p.x;
+      });
+      return _.uniq(positions).sort(function (a, b) {
+        return a - b;
+      });
+    }
+
+    /**
+     * @static
+     * @param {Array.<Point>} points
+     * @returns {Array.<number>}
+     */
+
+  }, {
+    key: 'mapY',
+    value: function mapY(points) {
+      var positions = points.map(function (p) {
+        return p.y;
+      });
+      return _.uniq(positions).sort(function (a, b) {
+        return a - b;
+      });
+    }
+  }]);
+
+  return Point;
+}();
 
 module.exports = Point;
 
@@ -110,11 +154,44 @@ module.exports = Point;
 "use strict";
 
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 module.exports = {
-    ClientRect: __webpack_require__(4),
-    Point: __webpack_require__(0),
-    Vector: __webpack_require__(5)
+    uniq: uniq,
+    flatten: flatten,
+    forEach: forEach
 };
+
+/**
+ * @param {Array} array
+ * @return {Array}
+ */
+function uniq(array) {
+    return array.reduce(function (memo, item) {
+        var includes = ~memo.indexOf(item);
+        return includes ? memo : memo.concat(item);
+    }, []);
+}
+
+/**
+ * @param {Array.<Array>} array
+ * @return {Array}
+ */
+function flatten(array) {
+    var _ref;
+
+    return (_ref = []).concat.apply(_ref, _toConsumableArray(array));
+}
+
+/**
+ * @param collection
+ * @param {function} iteratee
+ */
+function forEach(collection, iteratee) {
+    for (var i = 0; i < collection.length; i++) {
+        iteratee(collection[i], i, collection);
+    }
+}
 
 /***/ }),
 /* 2 */
@@ -123,13 +200,29 @@ module.exports = {
 "use strict";
 
 
+module.exports = {
+    ClientRect: __webpack_require__(5),
+    Point: __webpack_require__(0),
+    Vector: __webpack_require__(6)
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var domUtils = __webpack_require__(7);
+var _ = __webpack_require__(1);
+var domUtils = __webpack_require__(8);
 
-var _require = __webpack_require__(1),
+var _require = __webpack_require__(2),
     Point = _require.Point,
     Vector = _require.Vector,
     ClientRect = _require.ClientRect;
@@ -209,7 +302,7 @@ var LayerMask = function () {
             });
 
             var containerElement = this.buildContainer(canvasDimension, isFixed);
-            this.appendMask(containerElement, rectangles);
+            this.appendMask(containerElement, rectangles, canvasDimension);
 
             return containerElement;
         }
@@ -244,49 +337,63 @@ var LayerMask = function () {
          * @private
          * @param {Element} container
          * @param {Array.<ClientRect>} rectangles
+         * @param {Dimension} canvasDimension
          * @return {Element}
          */
 
     }, {
         key: 'appendMask',
-        value: function appendMask(container, rectangles) {
-            var _this2 = this;
+        value: function appendMask(container, rectangles, canvasDimension) {
+            var _ref,
+                _this2 = this;
 
             domUtils.addClasses(container, this.config.classesTable);
 
-            var colPositions = ClientRect.mapVertexesToAxisX(rectangles);
-            var rowPositions = ClientRect.mapVertexesToAxisY(rectangles);
+            var p0 = new Point(0, 0);
+            var pN = new Point(canvasDimension.width, canvasDimension.height);
 
-            this.addChildren(container, rowPositions.length, 'div', function (row, i) {
+            var vertexes = ClientRect.getVertexes(rectangles);
+            var points = (_ref = [p0, pN]).concat.apply(_ref, _toConsumableArray(vertexes));
+
+            var colPositions = Point.mapX(points);
+            var rowPositions = Point.mapY(points);
+
+            var rowsCount = rowPositions.length - 1;
+            var colsCount = colPositions.length - 1;
+
+            var rows = this.buildTable(rowsCount, colsCount);
+
+            _.forEach(rows, function (rowEl, i) {
+                domUtils.addClasses(rowEl, _this2.config.classesTableRow);
+
                 var rowInitial = rowPositions[i];
                 var rowTerminal = rowPositions[i + 1];
 
-                domUtils.addClasses(row, _this2.config.classesTableRow);
-                if (rowTerminal) {
-                    row.style.height = rowTerminal - rowInitial + 'px';
-                }
+                rowEl.style.height = rowTerminal - rowInitial + 'px';
 
-                _this2.addChildren(row, colPositions.length, 'div', function (cell, j) {
+                _.forEach(rowEl.childNodes, function (cellEl, j) {
+                    domUtils.addClasses(cellEl, _this2.config.classesTableCell);
+
                     var colInitial = colPositions[j];
                     var colTerminal = colPositions[j + 1];
 
-                    domUtils.addClasses(cell, _this2.config.classesTableCell);
-                    if (colTerminal) {
-                        cell.style.width = colTerminal - colInitial + 'px';
-                    }
+                    cellEl.style.width = colTerminal - colInitial + 'px';
 
-                    if (rowTerminal !== undefined && colTerminal !== undefined) {
-                        var initialPoint = new Point(colInitial, rowInitial);
-                        var terminalPoint = new Point(colTerminal, rowTerminal);
-                        var vector = new Vector(initialPoint, terminalPoint);
+                    // Check collision
+                    var initialPoint = new Point(colInitial, rowInitial);
+                    var terminalPoint = new Point(colTerminal, rowTerminal);
+                    var vector = new Vector(initialPoint, terminalPoint);
 
-                        if (rectangles.some(function (r) {
-                            return r.isVectorCollides(vector);
-                        })) {
-                            domUtils.addClasses(cell, _this2.config.classesTableCellHole);
-                        }
+                    if (rectangles.some(function (r) {
+                        return r.isVectorCollides(vector);
+                    })) {
+                        domUtils.addClasses(cellEl, _this2.config.classesTableCellHole);
                     }
                 });
+            });
+
+            _.forEach(rows, function (el, i) {
+                container.appendChild(el);
             });
 
             return container;
@@ -294,24 +401,27 @@ var LayerMask = function () {
 
         /**
          * @private
-         * @param {Element} container
-         * @param {number} count
-         * @param {string} tagName
-         * @param {?Function} [cb]
+         * @param {number} rowsCount
+         * @param {number} colsCount
+         * @return {Array.<Element>}
          */
 
     }, {
-        key: 'addChildren',
-        value: function addChildren(container, count, tagName) {
-            var cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
+        key: 'buildTable',
+        value: function buildTable(rowsCount, colsCount) {
+            var rows = [];
 
-            for (var i = 0; i < count; i++) {
-                var child = document.createElement(tagName);
-                container.appendChild(child);
-                if (cb) {
-                    cb(child, i);
+            for (var i = 0; i < rowsCount; i++) {
+                var rowEl = document.createElement('div');
+                rows.push(rowEl);
+
+                for (var j = 0; j < colsCount; j++) {
+                    var cellEl = document.createElement('div');
+                    rowEl.appendChild(cellEl);
                 }
             }
+
+            return rows;
         }
     }]);
 
@@ -321,7 +431,7 @@ var LayerMask = function () {
 module.exports = LayerMask;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -417,7 +527,7 @@ var LayerMaskManager = function () {
 module.exports = LayerMaskManager;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -427,104 +537,97 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var uniq = __webpack_require__(8);
+var _ = __webpack_require__(1);
+var Point = __webpack_require__(0);
 
 /**
  * @name ClientRect
+ * @descr It is similar to an abstract Rectangle class, but with inverted Y axis
  */
 
 var ClientRect = function () {
 
-  /**
-   * @param {number} left
-   * @param {number} right
-   * @param {number} top
-   * @param {number} bottom
-   * @param {number} width
-   * @param {number} height
-   */
-  function ClientRect(left, right, top, bottom, width, height) {
-    _classCallCheck(this, ClientRect);
+    /**
+     * @param {number} left
+     * @param {number} right
+     * @param {number} top
+     * @param {number} bottom
+     * @param {number} width
+     * @param {number} height
+     */
+    function ClientRect(left, right, top, bottom, width, height) {
+        _classCallCheck(this, ClientRect);
 
-    this.left = left;
-    this.right = right;
-    this.top = top;
-    this.bottom = bottom;
-    this.width = width;
-    this.height = height;
-  }
-
-  /**
-   * @public
-   * @param {Point} point
-   * @return {boolean}
-   */
-
-
-  _createClass(ClientRect, [{
-    key: 'isPointCollides',
-    value: function isPointCollides(point) {
-      var left = this.left;
-      var right = this.left + this.width;
-      var top = this.top;
-      var bottom = this.top + this.height;
-      return left <= point.x && point.x <= right && top <= point.y && point.y <= bottom;
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+        this.width = width;
+        this.height = height;
     }
 
     /**
      * @public
-     * @param {Vector} vector
+     * @param {Point} point
      * @return {boolean}
      */
 
-  }, {
-    key: 'isVectorCollides',
-    value: function isVectorCollides(vector) {
-      return this.isPointCollides(vector.initial) && this.isPointCollides(vector.terminal) && this.isPointCollides(vector.getMiddlePoint());
-    }
 
-    /**
-     * @static
-     * @param {Array.<ClientRect>} rectangles
-     * @returns {Array.<number>}
-     */
+    _createClass(ClientRect, [{
+        key: 'isPointCollides',
+        value: function isPointCollides(point) {
+            var left = this.left;
+            var right = this.left + this.width;
+            var top = this.top;
+            var bottom = this.top + this.height;
+            return left <= point.x && point.x <= right && top <= point.y && point.y <= bottom;
+        }
 
-  }], [{
-    key: 'mapVertexesToAxisX',
-    value: function mapVertexesToAxisX(rectangles) {
-      var abscissas = rectangles.reduce(function (memo, r) {
-        return memo.concat([r.left, r.left + r.width]);
-      }, [0]);
-      return uniq(abscissas).sort(function (a, b) {
-        return a - b;
-      });
-    }
+        /**
+         * @public
+         * @param {Vector} vector
+         * @return {boolean}
+         */
 
-    /**
-     * @static
-     * @param {Array.<ClientRect>} rectangles
-     * @returns {Array.<number>}
-     */
+    }, {
+        key: 'isVectorCollides',
+        value: function isVectorCollides(vector) {
+            return this.isPointCollides(vector.initial) && this.isPointCollides(vector.terminal) && this.isPointCollides(vector.getMiddlePoint());
+        }
 
-  }, {
-    key: 'mapVertexesToAxisY',
-    value: function mapVertexesToAxisY(rectangles) {
-      var ordinates = rectangles.reduce(function (memo, r) {
-        return memo.concat([r.top, r.top + r.height]);
-      }, [0]);
-      return uniq(ordinates).sort(function (a, b) {
-        return a - b;
-      });
-    }
-  }]);
+        /**
+         * @public
+         * @returns {Array.<Point>} Points are in the clockwise order
+         */
 
-  return ClientRect;
+    }, {
+        key: 'getVertexes',
+        value: function getVertexes() {
+            return [new Point(this.left, this.top), new Point(this.left + this.width, this.top), new Point(this.left + this.width, this.top + this.height), new Point(this.left, this.top + this.height)];
+        }
+
+        /**
+         * @static
+         * @param {Array.<ClientRect>} rectangles
+         */
+
+    }], [{
+        key: 'getVertexes',
+        value: function getVertexes(rectangles) {
+            var vertexes = rectangles.map(function (r) {
+                return r.getVertexes();
+            });
+            return _.flatten(vertexes);
+        }
+    }]);
+
+    return ClientRect;
 }();
 
 module.exports = ClientRect;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -574,19 +677,19 @@ var Vector = function () {
 module.exports = Vector;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 module.exports = {
-    LayerMask: __webpack_require__(2),
-    LayerMaskManager: __webpack_require__(3)
+    LayerMask: __webpack_require__(3),
+    LayerMaskManager: __webpack_require__(4)
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -594,7 +697,7 @@ module.exports = {
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var _require = __webpack_require__(1),
+var _require = __webpack_require__(2),
     ClientRect = _require.ClientRect;
 
 module.exports = {
@@ -748,26 +851,6 @@ function addClasses(element, classes) {
     var classArr = classes.split(' ');
     (_element$classList = element.classList).add.apply(_element$classList, _toConsumableArray(classArr));
 }
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * @param {Array} array
- * @return {Array}
- */
-var uniq = function uniq(array) {
-    return array.reduce(function (memo, item) {
-        var includes = ~memo.indexOf(item);
-        return includes ? memo : memo.concat(item);
-    }, []);
-};
-
-module.exports = uniq;
 
 /***/ })
 /******/ ]);
