@@ -13,14 +13,14 @@ Live demo:
 - [basic usage](https://cawabunga.github.io/layer-mask/)
 - [demo integration](https://cawabunga.github.io/layer-mask/tour.html) with [Shepherd](https://github.com/HubSpot/shepherd)
 
-Here are useful cases: 
+Here are useful cases ([example.css](src/examples.css)): 
 - allow/disallow clicking the specific elements on the page
 - creating a backdrop that highlights elements on the page
 
 Some details about the library:
 - supports handling the fixed positioned elements
 - written using ES6 and CommonJS modules (published as UMD)
-- uses **flexboxes** by the default, but you can [override it](src/layer-mask.css)
+- uses `display: table-*` rules by the default, but you can [override it](src/layer-mask.css)
 
 ### Installation
 `$ npm install layer-mask`
