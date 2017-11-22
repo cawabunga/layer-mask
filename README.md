@@ -26,7 +26,7 @@ Some details about the library:
 `$ npm install layer-mask`
 
 ### Documentation
-Please see the source code of [LayerMask](src/maskCreators/LayerMask.js) and [LayerMaskManager](src/LayerMaskManager.js).
+Please see the source code of [LayerMask](src/LayerMask.js) and [LayerMaskManager](src/LayerMaskManager.js).
 
 ### Usage
 Direct usage:
