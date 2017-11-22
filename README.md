@@ -23,7 +23,8 @@ Some details about the library:
 - uses `display: table-*` rules by the default, but you can [override it](src/layer-mask.css)
 
 ### Installation
-`$ npm install layer-mask`
+- `$ npm install layer-mask`
+- Then include JS (dist/layer-mask.js) and CSS (dist/layer-mask.css) to your application
 
 ### Documentation
 Please see the source code of [LayerMask](src/LayerMask.js) and [LayerMaskManager](src/LayerMaskManager.js).
