@@ -60,7 +60,7 @@ maskElement.onclick = () => {
 You add custom css classes to the mask element, simply pass `modifiers` configuration.
 ```javascript
 const mask = new LayerMask(document.querySelectorAll('#dummy'), {
-    modifier: [
+    modifiers: [
         // Predefined ones
         'spotlight',     // grays out cells around the target elements
         'click-through', // prevent from clicking outside the target elements
