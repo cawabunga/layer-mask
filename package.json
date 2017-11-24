@@ -1,6 +1,6 @@
 {
   "name": "layer-mask",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Mask elements on the page",
   "license": "MIT",
   "main": "dist/layer-mask.js",
