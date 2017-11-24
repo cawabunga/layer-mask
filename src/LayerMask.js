@@ -10,8 +10,6 @@ class LayerMask {
      * @property {boolean} [debug]
      * @property {number} [padding]
      * @property {string} [classes]
-     * @property {string} [classesCanvas]
-     * @property {string} [classesSvg]
      * @property {string} [classesFixed]
      * @property {string} [classesTable]
      * @property {string} [classesTableRow]
@@ -33,8 +31,6 @@ class LayerMask {
             classesTableRow: 'layer-mask-table__row',
             classesTableCell: 'layer-mask-table__cell',
             classesTableCellHole: 'layer-mask-table__cell--hole',
-            classesCanvas: 'layer-mask--canvas',
-            classesSvg: 'layer-mask--svg',
             classesFixed: 'layer-mask--fixed',
         };
     }

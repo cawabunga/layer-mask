@@ -19,8 +19,6 @@ describe('LayerMask', () => {
         expect(LayerMask.defaults.classesTableRow).toEqual('layer-mask-table__row');
         expect(LayerMask.defaults.classesTableCell).toEqual('layer-mask-table__cell');
         expect(LayerMask.defaults.classesTableCellHole).toEqual('layer-mask-table__cell--hole');
-        expect(LayerMask.defaults.classesCanvas).toEqual('layer-mask--canvas');
-        expect(LayerMask.defaults.classesSvg).toEqual('layer-mask--svg');
         expect(LayerMask.defaults.classesFixed).toEqual('layer-mask--fixed');
     });
 
