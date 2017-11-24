@@ -235,12 +235,10 @@ var LayerMask = function () {
         /**
          * @typedef {Object} LayerMaskConfig
          *
-         * @property {boolean} [debug]
          * @property {number} [padding]
-         * @property {string} [classes]
-         * @property {string} [classesCanvas]
-         * @property {string} [classesSvg]
-         * @property {string} [classesFixed]
+         * @property {boolean} [singular] say to build the only one hole in the mask that cover all target elements
+         * @property {string} [rootClass]
+         * @property {Array.<string>} [modifiers] modifiers that appended to root class. Predefined: "debug", "click-through" and "spotlight"
          * @property {string} [classesTable]
          * @property {string} [classesTableRow]
          * @property {string} [classesTableCell]
@@ -253,28 +251,27 @@ var LayerMask = function () {
          */
         get: function get() {
             return {
-                debug: false,
                 padding: 0,
-                classes: 'layer-mask',
-                classesDebug: 'layer-mask--debug',
+                singular: false,
+                rootClass: 'layer-mask',
+                modifiers: [],
                 classesTable: 'layer-mask-table',
                 classesTableRow: 'layer-mask-table__row',
                 classesTableCell: 'layer-mask-table__cell',
-                classesTableCellHole: 'layer-mask-table__cell--hole',
-                classesCanvas: 'layer-mask--canvas',
-                classesSvg: 'layer-mask--svg',
-                classesFixed: 'layer-mask--fixed'
+                classesTableCellHole: 'layer-mask-table__cell--hole'
             };
         }
 
         /**
-         * @param {NodeList|Element} elements
-         * @param {LayerMaskConfig} config
+         * @param {NodeList|Element|Array.<Element>} elements
+         * @param {LayerMaskConfig} [config = {}]
          */
 
     }]);
 
-    function LayerMask(elements, config) {
+    function LayerMask(elements) {
+        var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         _classCallCheck(this, LayerMask);
 
         this.config = Object.assign({}, this.constructor.defaults, config);
@@ -295,7 +292,8 @@ var LayerMask = function () {
             var isFixed = domUtils.isElementFixed(this.elements[0]);
             var canvasDimension = isFixed ? domUtils.getWindowDimensions() : domUtils.getPageDimensions();
 
-            var rectangles = domUtils.getAllBoundaries(this.elements).map(function (rect) {
+            var sourceRectangles = domUtils.getAllBoundaries(this.elements);
+            var rectangles = (!this.config.singular ? sourceRectangles : [ClientRect.combine(sourceRectangles)]).map(function (rect) {
                 return domUtils.addPadding(rect, _this.config.padding);
             }).map(function (rect) {
                 return domUtils.addPageOffset(rect, isFixed);
@@ -317,20 +315,51 @@ var LayerMask = function () {
     }, {
         key: 'buildContainer',
         value: function buildContainer(canvasDimension, isFixed) {
+            var _this2 = this;
+
             var container = document.createElement('div');
 
             container.style.width = canvasDimension.width + 'px';
             container.style.height = canvasDimension.height + 'px';
 
-            domUtils.addClasses(container, this.config.classes);
-            if (isFixed) {
-                domUtils.addClasses(container, this.config.classesFixed);
-            }
-            if (this.config.debug) {
-                domUtils.addClasses(container, this.config.classesDebug);
-            }
+            domUtils.addClasses(container, this.config.rootClass);
+
+            this.getModifiers(isFixed).forEach(function (modifier) {
+                var cssClass = _this2.createModifierCssClass(modifier);
+                domUtils.addClasses(container, cssClass);
+            });
 
             return container;
+        }
+
+        /**
+         * @private
+         * @param {string} modifier
+         * @return {string}
+         */
+
+    }, {
+        key: 'createModifierCssClass',
+        value: function createModifierCssClass(modifier) {
+            return this.config.rootClass + '--' + modifier;
+        }
+
+        /**
+         * @private
+         * @param {boolean} isFixed
+         * @return {Array.<string>}
+         */
+
+    }, {
+        key: 'getModifiers',
+        value: function getModifiers(isFixed) {
+            var modifiers = [].concat(this.config.modifiers);
+
+            if (isFixed) {
+                modifiers.push('fixed');
+            }
+
+            return modifiers;
         }
 
         /**
@@ -345,7 +374,7 @@ var LayerMask = function () {
         key: 'appendMask',
         value: function appendMask(container, rectangles, canvasDimension) {
             var _ref,
-                _this2 = this;
+                _this3 = this;
 
             domUtils.addClasses(container, this.config.classesTable);
 
@@ -364,7 +393,7 @@ var LayerMask = function () {
             var rows = this.buildTable(rowsCount, colsCount);
 
             _.forEach(rows, function (rowEl, i) {
-                domUtils.addClasses(rowEl, _this2.config.classesTableRow);
+                domUtils.addClasses(rowEl, _this3.config.classesTableRow);
 
                 var rowInitial = rowPositions[i];
                 var rowTerminal = rowPositions[i + 1];
@@ -372,7 +401,7 @@ var LayerMask = function () {
                 rowEl.style.height = rowTerminal - rowInitial + 'px';
 
                 _.forEach(rowEl.childNodes, function (cellEl, j) {
-                    domUtils.addClasses(cellEl, _this2.config.classesTableCell);
+                    domUtils.addClasses(cellEl, _this3.config.classesTableCell);
 
                     var colInitial = colPositions[j];
                     var colTerminal = colPositions[j + 1];
@@ -387,7 +416,7 @@ var LayerMask = function () {
                     if (rectangles.some(function (r) {
                         return r.isVectorCollides(vector);
                     })) {
-                        domUtils.addClasses(cellEl, _this2.config.classesTableCellHole);
+                        domUtils.addClasses(cellEl, _this3.config.classesTableCellHole);
                     }
                 });
             });
@@ -535,6 +564,8 @@ module.exports = LayerMaskManager;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var _ = __webpack_require__(1);
@@ -558,6 +589,19 @@ var ClientRect = function () {
     function ClientRect(left, right, top, bottom, width, height) {
         _classCallCheck(this, ClientRect);
 
+        if (left > right) {
+            throw new TypeError('inconsistent rectangle: right value should be bigger than left value');
+        }
+        if (top > bottom) {
+            throw new TypeError('inconsistent rectangle: bottom value should be bigger than top value');
+        }
+        if (right - left !== width) {
+            throw new TypeError('inconsistent rectangle: invalid width value');
+        }
+        if (bottom - top !== height) {
+            throw new TypeError('inconsistent rectangle: invalid height value');
+        }
+
         this.left = left;
         this.right = right;
         this.top = top;
@@ -567,14 +611,21 @@ var ClientRect = function () {
     }
 
     /**
-     * @public
-     * @param {Point} point
-     * @return {boolean}
+     * @static
+     * @param {Object.<top, left, bottom, right>} hostClientRect
+     * @return {ClientRect}
      */
 
 
     _createClass(ClientRect, [{
         key: 'isPointCollides',
+
+
+        /**
+         * @public
+         * @param {Point} point
+         * @return {boolean}
+         */
         value: function isPointCollides(point) {
             var left = this.left;
             var right = this.left + this.width;
@@ -609,15 +660,57 @@ var ClientRect = function () {
         /**
          * @static
          * @param {Array.<ClientRect>} rectangles
+         * @return {Array.<Point>}
          */
 
     }], [{
+        key: 'from',
+        value: function from(hostClientRect) {
+            var left = hostClientRect.left,
+                right = hostClientRect.right,
+                top = hostClientRect.top,
+                bottom = hostClientRect.bottom,
+                width = hostClientRect.width,
+                height = hostClientRect.height;
+
+            return new this(left, right, top, bottom, width, height);
+        }
+    }, {
         key: 'getVertexes',
         value: function getVertexes(rectangles) {
             var vertexes = rectangles.map(function (r) {
                 return r.getVertexes();
             });
             return _.flatten(vertexes);
+        }
+
+        /**
+         * @static
+         * @param {Array.<ClientRect>} rectangles
+         * @return {ClientRect}
+         */
+
+    }, {
+        key: 'combine',
+        value: function combine(rectangles) {
+            var vertexes = this.getVertexes(rectangles);
+
+            var X = vertexes.map(function (v) {
+                return v.x;
+            });
+            var Y = vertexes.map(function (v) {
+                return v.y;
+            });
+
+            var left = Math.min.apply(Math, _toConsumableArray(X));
+            var right = Math.max.apply(Math, _toConsumableArray(X));
+            var top = Math.min.apply(Math, _toConsumableArray(Y));
+            var bottom = Math.max.apply(Math, _toConsumableArray(Y));
+
+            var width = right - left;
+            var height = bottom - top;
+
+            return new this(left, right, top, bottom, width, height);
         }
     }]);
 
@@ -803,7 +896,7 @@ function getParentElements(element) {
  */
 function getAllBoundaries(elements) {
     return elements.map(function (element) {
-        return element.getBoundingClientRect();
+        return ClientRect.from(element.getBoundingClientRect());
     });
 }
 
