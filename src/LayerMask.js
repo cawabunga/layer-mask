@@ -9,6 +9,7 @@ class LayerMask {
      *
      * @property {boolean} [debug]
      * @property {number} [padding]
+     * @property {number} [singular] say to build the only one hole in the mask that cover all target elements
      * @property {string} [classes]
      * @property {string} [classesFixed]
      * @property {string} [classesTable]
@@ -25,6 +26,7 @@ class LayerMask {
         return {
             debug: false,
             padding: 0,
+            singular: false,
             classes: 'layer-mask',
             classesDebug: 'layer-mask--debug',
             classesTable: 'layer-mask-table',
@@ -36,10 +38,10 @@ class LayerMask {
     }
 
     /**
-     * @param {NodeList|Element} elements
-     * @param {LayerMaskConfig} config
+     * @param {NodeList|Element|Array.<Element>} elements
+     * @param {LayerMaskConfig} [config = {}]
      */
-    constructor(elements, config) {
+    constructor(elements, config = {}) {
         this.config = Object.assign({}, this.constructor.defaults, config);
         this.elements = elements.length ? [].slice.call(elements) : [elements];
     }
@@ -52,7 +54,8 @@ class LayerMask {
         const isFixed = domUtils.isElementFixed(this.elements[0]);
         const canvasDimension = isFixed ? domUtils.getWindowDimensions() : domUtils.getPageDimensions();
 
-        const rectangles = domUtils.getAllBoundaries(this.elements)
+        const sourceRectangles = domUtils.getAllBoundaries(this.elements);
+        const rectangles = (!this.config.singular ? sourceRectangles : [ClientRect.combine(sourceRectangles)])
             .map(rect => domUtils.addPadding(rect, this.config.padding))
             .map(rect => domUtils.addPageOffset(rect, isFixed));
 

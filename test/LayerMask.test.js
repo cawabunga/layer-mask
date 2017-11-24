@@ -153,6 +153,60 @@ describe('LayerMask', () => {
 
         });
 
+        describe('#createMask(): singular', () => {
+
+            let maskEl, targetElement2;
+
+            beforeEach(() => {
+                targetElement2 = document.createElement('div');
+                body.appendChild(targetElement2);
+
+                targetElement2.style.background = 'green';
+                targetElement.style.position = 'absolute';
+                targetElement.style.top = '100px';
+                targetElement.style.left = '60px';
+                targetElement.style.width = '40px';
+                targetElement.style.height = '70px';
+
+                targetElement2.style.background = 'red';
+                targetElement2.style.position = 'absolute';
+                targetElement2.style.top = '50px';
+                targetElement2.style.left = '100px';
+                targetElement2.style.width = '120px';
+                targetElement2.style.height = '40px';
+
+                layerMask = new LayerMask([targetElement, targetElement2], { singular: true, debug: true });
+                maskEl = layerMask.createMask();
+
+                body.appendChild(maskEl);
+            });
+
+            afterEach(() => {
+                targetElement2.remove();
+                targetElement2 = undefined;
+
+                maskEl.remove();
+                maskEl = undefined;
+            });
+
+            it('should has only single hole', () => {
+                const holeElements = maskEl.querySelectorAll('.layer-mask-table__cell--hole');
+                expect(holeElements.length).toBe(1);
+            });
+
+
+            it('the hole should cover all target elements', () => {
+                const hole = maskEl.querySelector('.layer-mask-table__cell--hole');
+                const offset = hole.getBoundingClientRect();
+
+                expect(offset.top).toEqual(50);
+                expect(offset.left).toEqual(60);
+                expect(offset.width).toEqual(160);
+                expect(offset.height).toEqual(120);
+            });
+
+        });
+
     });
 
 });

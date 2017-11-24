@@ -101,7 +101,7 @@ function getParentElements(element) {
  */
 function getAllBoundaries(elements) {
     return elements.map(element => {
-        return element.getBoundingClientRect();
+        return ClientRect.from(element.getBoundingClientRect());
     });
 }
 
