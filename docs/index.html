@@ -127,7 +127,7 @@
 
         var targetElements = document.querySelectorAll(selector);
         var mask = new layerMask.LayerMask(targetElements, {
-            debug: debug,
+            modifiers: ['click-through'].concat(debug ? ['debug'] : []),
             padding: padding,
         });
 
