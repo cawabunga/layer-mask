@@ -11,15 +11,13 @@ describe('LayerMask', () => {
     });
 
     it('should has default configuration property', () => {
-        expect(LayerMask.defaults.debug).toBe(false);
         expect(LayerMask.defaults.padding).toBe(0);
-        expect(LayerMask.defaults.classes).toEqual('layer-mask');
-        expect(LayerMask.defaults.classesDebug).toEqual('layer-mask--debug');
+        expect(LayerMask.defaults.rootClass).toEqual('layer-mask');
+        expect(LayerMask.defaults.modifiers).toEqual([]);
         expect(LayerMask.defaults.classesTable).toEqual('layer-mask-table');
         expect(LayerMask.defaults.classesTableRow).toEqual('layer-mask-table__row');
         expect(LayerMask.defaults.classesTableCell).toEqual('layer-mask-table__cell');
         expect(LayerMask.defaults.classesTableCellHole).toEqual('layer-mask-table__cell--hole');
-        expect(LayerMask.defaults.classesFixed).toEqual('layer-mask--fixed');
     });
 
     describe('instance', () => {
@@ -47,6 +45,13 @@ describe('LayerMask', () => {
             expect(layerMask.createMask).toEqual(jasmine.any(Function));
             expect(layerMask.elements).toEqual(jasmine.any(Array));
             expect(layerMask.config).toEqual(jasmine.any(Object));
+        });
+
+        it('should add specified modifier classes', () => {
+            layerMask.config.modifiers.push('my-modifier');
+            const maskEl = layerMask.createMask();
+
+            expect(maskEl.classList.contains('layer-mask--my-modifier')).toBe(true);
         });
 
         describe('#createMask():', () => {
@@ -108,15 +113,6 @@ describe('LayerMask', () => {
                 expect(cell.classList.contains('layer-mask-table__cell--hole')).toBe(true);
             });
 
-            it('should add debug class', () => {
-                expect(container.classList.contains('layer-mask--debug')).toBe(false);
-
-                layerMask.config.debug = true;
-                container = layerMask.createMask();
-
-                expect(container.classList.contains('layer-mask--debug')).toBe(true);
-            });
-
         });
 
         describe('#createMask(): fixed element', () => {
@@ -175,7 +171,7 @@ describe('LayerMask', () => {
                 targetElement2.style.width = '120px';
                 targetElement2.style.height = '40px';
 
-                layerMask = new LayerMask([targetElement, targetElement2], { singular: true, debug: true });
+                layerMask = new LayerMask([targetElement, targetElement2], { singular: true });
                 maskEl = layerMask.createMask();
 
                 body.appendChild(maskEl);

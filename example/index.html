@@ -5,7 +5,6 @@
   <title>Title</title>
 
   <link rel="stylesheet" href="../src/layer-mask.css">
-  <link rel="stylesheet" href="../src/examples.css">
   <style>
     .text-center {
       text-align: center;
@@ -39,8 +38,7 @@
     (function () {
         const manager = new layerMask.LayerMaskManager(document.querySelector('body'));
         const mask = new layerMask.LayerMask(document.querySelectorAll('#link-1, #link-2'), {
-            debug: true,
-            classes: 'layer-mask clicking-example',
+            modifiers: ['click-through', 'debug'],
         });
         manager.revealMask(mask);
     }());

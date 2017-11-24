@@ -7,11 +7,10 @@ class LayerMask {
     /**
      * @typedef {Object} LayerMaskConfig
      *
-     * @property {boolean} [debug]
      * @property {number} [padding]
-     * @property {number} [singular] say to build the only one hole in the mask that cover all target elements
-     * @property {string} [classes]
-     * @property {string} [classesFixed]
+     * @property {boolean} [singular] say to build the only one hole in the mask that cover all target elements
+     * @property {string} [rootClass]
+     * @property {Array.<string>} [modifiers] modifiers that appended to root class. Predefined: "debug", "click-through" and "spotlight"
      * @property {string} [classesTable]
      * @property {string} [classesTableRow]
      * @property {string} [classesTableCell]
@@ -24,16 +23,14 @@ class LayerMask {
      */
     static get defaults() {
         return {
-            debug: false,
             padding: 0,
             singular: false,
-            classes: 'layer-mask',
-            classesDebug: 'layer-mask--debug',
+            rootClass: 'layer-mask',
+            modifiers: [],
             classesTable: 'layer-mask-table',
             classesTableRow: 'layer-mask-table__row',
             classesTableCell: 'layer-mask-table__cell',
             classesTableCellHole: 'layer-mask-table__cell--hole',
-            classesFixed: 'layer-mask--fixed',
         };
     }
 
@@ -77,15 +74,39 @@ class LayerMask {
         container.style.width = `${canvasDimension.width}px`;
         container.style.height = `${canvasDimension.height}px`;
 
-        domUtils.addClasses(container, this.config.classes);
-        if (isFixed) {
-            domUtils.addClasses(container, this.config.classesFixed);
-        }
-        if (this.config.debug) {
-            domUtils.addClasses(container, this.config.classesDebug);
-        }
+        domUtils.addClasses(container, this.config.rootClass);
+
+        this.getModifiers(isFixed).forEach(modifier => {
+            const cssClass = this.createModifierCssClass(modifier);
+            domUtils.addClasses(container, cssClass);
+        });
 
         return container;
+    }
+
+    /**
+     * @private
+     * @param {string} modifier
+     * @return {string}
+     */
+    createModifierCssClass(modifier) {
+        return `${this.config.rootClass}--${modifier}`;
+    }
+
+
+    /**
+     * @private
+     * @param {boolean} isFixed
+     * @return {Array.<string>}
+     */
+    getModifiers(isFixed) {
+        const modifiers = [].concat(this.config.modifiers);
+
+        if (isFixed) {
+            modifiers.push('fixed');
+        }
+
+        return modifiers;
     }
 
     /**

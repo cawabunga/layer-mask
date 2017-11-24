@@ -13,9 +13,9 @@ Live demo:
 - [basic usage](https://cawabunga.github.io/layer-mask/)
 - [demo integration](https://cawabunga.github.io/layer-mask/tour.html) with [Shepherd](https://github.com/HubSpot/shepherd)
 
-Here are useful cases ([example.css](src/examples.css)): 
-- allow/disallow clicking the specific elements on the page
-- creating a backdrop that highlights elements on the page
+Here are useful cases:
+- allow/disallow clicking the specific elements on the page (modifier: "click-through")
+- creating a backdrop that highlights elements on the page (modifier: "spotlight")
 
 Some details about the library:
 - supports handling the fixed positioned elements
@@ -54,6 +54,20 @@ const maskElement = maskManager.revealMask(mask);
 maskElement.onclick = () => {
     maskManager.hideActiveMask();
 };
+```
+
+### Modifiers
+You add custom css classes to the mask element, simply pass `modifiers` configuration.
+```javascript
+const mask = new LayerMask(document.querySelectorAll('#dummy'), {
+    modifier: [
+        // Predefined ones
+        'spotlight',     // grays out cells around the target elements
+        'click-through', // prevent from clicking outside the target elements
+        'debug',         // sames as "spotlight" but in yellow color :)
+    ],
+});
+const maskEl = mask.createMask();
 ```
 
 ### Roadmap

@@ -6,10 +6,6 @@
     z-index: 9998; /* Don't forget to override according to your css */
 }
 
-.layer-mask--fixed {
-    position: fixed;
-}
-
 .layer-mask-table__row {
     display: table-row;
 }
@@ -18,9 +14,41 @@
     display: table-cell;
 }
 
+/* Predefined Modifiers */
+
+.layer-mask--fixed {
+    position: fixed;
+}
+
+
 .layer-mask--debug .layer-mask-table__cell {
     background: rgba(221, 196, 9, 0.5);
 }
 .layer-mask--debug .layer-mask-table__cell--hole {
+    background: none;
+}
+
+
+.layer-mask--click-through,
+.layer-mask--click-through .layer-mask-table__row {
+    pointer-events: none;
+}
+
+.layer-mask--click-through .layer-mask-table__cell {
+    pointer-events: auto;
+}
+
+.layer-mask--click-through .layer-mask-table__cell--hole {
+    pointer-events: none;
+}
+
+
+.layer-mask--spotlight {}
+
+.layer-mask--spotlight .layer-mask-table__cell {
+    background: rgba(0, 0, 0, .5);
+}
+
+.layer-mask--spotlight .layer-mask-table__cell--hole {
     background: none;
 }
