@@ -125,8 +125,8 @@ class LayerMask {
         const vertexes = ClientRect.getVertexes(rectangles);
         const points = [p0, pN].concat(...vertexes);
 
-        const colPositions = Point.mapX(points);
-        const rowPositions = Point.mapY(points);
+        const colPositions = Point.mapX(points).filter(number => number >= 0 );
+        const rowPositions = Point.mapY(points).filter(number => number >= 0 );
 
         const rowsCount = rowPositions.length - 1;
         const colsCount = colPositions.length - 1;

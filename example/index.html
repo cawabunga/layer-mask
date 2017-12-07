@@ -10,10 +10,38 @@
       text-align: center;
     }
 
+    .push {
+      height: 1000px
+    }
+
     .position-1 {
       position: absolute;
       left: 30%;
       top: 30%
+    }
+
+    .on-border-1 {
+      position: fixed;
+      top: -10px;
+      left: -10px;
+    }
+
+    .on-border-2 {
+      position: fixed;
+      top: 0;
+      right: 0;
+    }
+
+    .on-border-3 {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
+
+    .on-border-4 {
+      position: fixed;
+      bottom: 0;
+      right: 0;
     }
   </style>
 </head>
@@ -31,7 +59,20 @@
   <a href="javascript:void(0)" onclick="alert('Clicked')" id="link-2">Hello, Cawabunga!</a> (clickable)
 </p>
 
-<div id="canvas"></div>
+<div class="on-border-1">
+  <span id="block-1">Top left</span>
+</div>
+<div class="on-border-2">
+  <span id="block-2">Top right</span>
+</div>
+<div class="on-border-3">
+  <span id="block-3">Bottom left</span>
+</div>
+<div class="on-border-4">
+  <span id="block-4">Bottom right</span>
+</div>
+
+<div class="push"></div>
 
 <script src="../serve/layer-mask.js"></script>
 <script>
@@ -39,6 +80,7 @@
         const manager = new layerMask.LayerMaskManager(document.querySelector('body'));
         const mask = new layerMask.LayerMask(document.querySelectorAll('#link-1, #link-2'), {
             modifiers: ['click-through', 'debug'],
+            padding: 5,
         });
         manager.revealMask(mask);
     }());
