@@ -6,6 +6,8 @@ node_js:
 install:
   - "npm install"
 
+sudo: required # https://github.com/travis-ci/travis-ci/issues/8836
+
 addons:
   chrome: stable
 
