@@ -44,6 +44,37 @@ class LayerMaskManager {
     /**
      * @public
      * @throws {Error} Will throw an error if the layer mask instance is not passed before.
+     */
+    addElementsToMask(elements) {
+        if (!this.currentLayerMask) {
+            throw new Error('layer mask is missing');
+        }
+
+        this.currentLayerMask.addElements(elements);
+        this.refreshMask();
+    }
+
+    /**
+     * @public
+     * @throws {Error} Will throw an error if the layer mask instance is not passed before.
+     */
+    removeElementsFromMask(elements) {
+        if (!this.currentLayerMask) {
+            throw new Error('layer mask is missing');
+        }
+
+        this.currentLayerMask.removeElements(elements);
+
+        if (this.currentLayerMask.elements.length) {
+            this.refreshMask();
+        } else {
+            this.hideActiveMask();
+        }
+    }
+
+    /**
+     * @public
+     * @throws {Error} Will throw an error if the layer mask instance is not passed before.
      * @return {Element}
      */
     refreshMask() {

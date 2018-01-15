@@ -2,6 +2,7 @@ module.exports = {
     uniq,
     flatten,
     forEach,
+    withoutSingle,
 };
 
 /**
@@ -31,4 +32,15 @@ function forEach(collection, iteratee) {
     for (let i = 0; i < collection.length; i++) {
         iteratee(collection[i], i, collection);
     }
+}
+
+function withoutIndex(arr, index) {
+    return [].concat(arr.slice(0, index), arr.slice(index + 1));
+}
+
+function withoutSingle(arr, ...values) {
+    return values.reduce((memo, value) => {
+        const i = memo.indexOf(value);
+        return ~i ? withoutIndex(memo, i) : memo;
+    }, arr);
 }

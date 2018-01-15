@@ -40,7 +40,26 @@ class LayerMask {
      */
     constructor(elements, config = {}) {
         this.config = Object.assign({}, this.constructor.defaults, config);
-        this.elements = elements.length ? [].slice.call(elements) : [elements];
+        this.elements = [];
+        this.addElements(elements);
+    }
+
+    /**
+     * @public
+     * @param {NodeList|Element|Array.<Element>} elements
+     */
+    addElements(elements) {
+        const localElements = elements.length ? [].slice.call(elements) : [elements];
+        this.elements = this.elements.concat(localElements);
+    }
+
+    /**
+     * @public
+     * @param {NodeList|Element|Array.<Element>} elements
+     */
+    removeElements(elements) {
+        const localElements = elements.length ? [].slice.call(elements) : [elements];
+        this.elements = _.withoutSingle(this.elements, ...localElements);
     }
 
     /**

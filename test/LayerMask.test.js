@@ -42,6 +42,8 @@ describe('LayerMask', () => {
         });
 
         it('should has specific interface', () => {
+            expect(layerMask.addElements).toEqual(jasmine.any(Function));
+            expect(layerMask.removeElements).toEqual(jasmine.any(Function));
             expect(layerMask.createMask).toEqual(jasmine.any(Function));
             expect(layerMask.elements).toEqual(jasmine.any(Array));
             expect(layerMask.config).toEqual(jasmine.any(Object));
@@ -52,6 +54,21 @@ describe('LayerMask', () => {
             const maskEl = layerMask.createMask();
 
             expect(maskEl.classList.contains('layer-mask--my-modifier')).toBe(true);
+        });
+
+        it('should add elements to array', () => {
+            const myEl = document.createElement('div');
+            layerMask.addElements([myEl, myEl]);
+
+            expect(layerMask.elements).toEqual([targetElement, myEl, myEl]);
+        });
+
+        it('should remove elements from array', () => {
+            const myEl = document.createElement('div');
+            layerMask.addElements([myEl, myEl]);
+            layerMask.removeElements(myEl);
+
+            expect(layerMask.elements).toEqual([targetElement, myEl]);
         });
 
         describe('#createMask():', () => {
