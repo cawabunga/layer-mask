@@ -29,8 +29,19 @@ function flatten(array) {
  * @param {function} iteratee
  */
 function forEach(collection, iteratee) {
-    for (let i = 0; i < collection.length; i++) {
-        iteratee(collection[i], i, collection);
+    if (collection.forEach) {
+        collection.forEach(iteratee);
+
+    } else if (typeof collection.length === 'number') {
+        for (let i = 0; i < collection.length; i++) {
+            iteratee(collection[i], i, collection);
+        }
+
+    } else {
+        for (let keys = Object.keys(collection), i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            iteratee(collection[key], key, collection);
+        }
     }
 }
 

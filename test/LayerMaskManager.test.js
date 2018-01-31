@@ -99,5 +99,18 @@ describe('LayerMaskManager', () => {
 
         });
 
+        describe('mask element options', () => {
+
+            it('should attach click event handler', () => {
+                const spy = jasmine.createSpy('click');
+                const element = maskManager.revealMask(layerMaskMock, { click: spy });
+
+                expect(spy).not.toHaveBeenCalled();
+                element.click();
+                expect(spy).toHaveBeenCalled();
+            });
+
+        });
+
     });
 });

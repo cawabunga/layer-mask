@@ -1,3 +1,4 @@
+const _ = require('./utils/_');
 
 class LayerMaskManager {
 
@@ -8,14 +9,16 @@ class LayerMaskManager {
         this._container = container;
         this.currentLayerMask = undefined;
         this.activeMaskElement = undefined;
+        this.activeMaskElementOptions = undefined;
     }
 
     /**
      * @public
      * @param {LayerMask} layerMask
+     * @param {Object} [maskElementOptions = {}]
      * @return {Element}
      */
-    revealMask(layerMask) {
+    revealMask(layerMask, maskElementOptions = {}) {
         if (this.activeMaskElement) {
             this.hideActiveMask();
         }
@@ -23,7 +26,8 @@ class LayerMaskManager {
         this.currentLayerMask = layerMask;
 
         const maskElement = layerMask.createMask();
-        this.setActiveMask(maskElement);
+        this._setActiveMaskElement(maskElement);
+        this._setActiveMaskElementOptions(maskElementOptions);
 
         return maskElement;
     }
@@ -37,8 +41,11 @@ class LayerMaskManager {
             throw new Error('mask element is missing');
         }
 
+        this.currentLayerMask = undefined;
+
         this.activeMaskElement.remove();
         this.activeMaskElement = undefined;
+        this.activeMaskElementOptions = undefined;
     }
 
     /**
@@ -82,16 +89,42 @@ class LayerMaskManager {
             throw new Error('layer mask is missing');
         }
 
-        return this.revealMask(this.currentLayerMask);
+        return this.revealMask(this.currentLayerMask, this.activeMaskElementOptions);
     }
 
     /**
      * @private
      * @param {Element} maskElement
      */
-    setActiveMask(maskElement) {
+    _setActiveMaskElement(maskElement) {
         this._container.appendChild(maskElement);
         this.activeMaskElement = maskElement;
+    }
+
+    /**
+     * @private
+     * @param {Object} maskElementOptions
+     */
+    _setActiveMaskElementOptions(maskElementOptions) {
+        this.activeMaskElementOptions = maskElementOptions;
+
+        _.forEach(maskElementOptions, (optionValue, optionKey) => {
+            this._applyOption(this.activeMaskElement, optionKey, optionValue);
+        });
+    }
+
+    /**
+     * @private
+     * @param {Element} maskElement
+     * @param {string} optionKey
+     * @param {*} optionValue
+     */
+    _applyOption(maskElement, optionKey, optionValue) {
+        switch (optionKey) {
+            case 'click':
+                maskElement.addEventListener('click', optionValue);
+                break;
+        }
     }
 
 }
