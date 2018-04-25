@@ -1,4 +1,5 @@
 const _ = require('./utils/_');
+const debounce = require('lodash.debounce');
 
 class LayerMaskManager {
 
@@ -6,6 +7,7 @@ class LayerMaskManager {
      * @param {Element} container
      */
     constructor(container) {
+        this._listeners = [];
         this._container = container;
         this.currentLayerMask = undefined;
         this.activeMaskElement = undefined;
@@ -29,6 +31,8 @@ class LayerMaskManager {
         this._setActiveMaskElement(maskElement);
         this._setActiveMaskElementOptions(maskElementOptions);
 
+        this._startResizeListener();
+
         return maskElement;
     }
 
@@ -40,6 +44,8 @@ class LayerMaskManager {
         if (!this.activeMaskElement) {
             throw new Error('mask element is missing');
         }
+
+        this._stopAllListeners();
 
         this.currentLayerMask = undefined;
 
@@ -125,6 +131,27 @@ class LayerMaskManager {
                 maskElement.addEventListener('click', optionValue);
                 break;
         }
+    }
+
+    /**
+     * @private
+     */
+    _startResizeListener() {
+        const fn = () => this.refreshMask();
+        window.addEventListener('resize', fn, false);
+        const detach = () => {
+            window.removeEventListener('resize', debounce(fn, 150), false);
+        };
+        this._listeners.push(detach);
+    }
+
+    /**
+     * @private
+     */
+    _stopAllListeners() {
+        const invoke = (fn) => fn();
+        this._listeners.forEach(invoke);
+        this._listeners = [];
     }
 
 }
