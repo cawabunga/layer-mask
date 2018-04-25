@@ -137,10 +137,11 @@ class LayerMaskManager {
      * @private
      */
     _startResizeListener() {
-        const fn = () => this.refreshMask();
-        window.addEventListener('resize', fn, false);
+        const handler = () => this.refreshMask();
+        const debouncedHandler = debounce(handler, 150);
+        window.addEventListener('resize', debouncedHandler, false);
         const detach = () => {
-            window.removeEventListener('resize', debounce(fn, 150), false);
+            window.removeEventListener('resize', debouncedHandler, false);
         };
         this._listeners.push(detach);
     }
