@@ -16,6 +16,14 @@ class LayerMaskManager {
 
     /**
      * @public
+     * @return {Boolean}
+     */
+    hasActiveMask() {
+        return Boolean(this.currentLayerMask);
+    }
+
+    /**
+     * @public
      * @param {LayerMask} layerMask
      * @param {Object} [maskElementOptions = {}]
      * @return {Element}

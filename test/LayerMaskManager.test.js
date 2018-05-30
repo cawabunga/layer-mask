@@ -26,6 +26,7 @@ describe('LayerMaskManager', () => {
         });
 
         it('should has specific interface', () => {
+            expect(maskManager.hasActiveMask).toEqual(jasmine.any(Function));
             expect(maskManager.revealMask).toEqual(jasmine.any(Function));
             expect(maskManager.hideActiveMask).toEqual(jasmine.any(Function));
         });
@@ -110,6 +111,16 @@ describe('LayerMaskManager', () => {
                 expect(spy).toHaveBeenCalled();
             });
 
+        });
+
+        it('#hasActiveMask(): should determine is there revealed mask', () => {
+            expect(maskManager.hasActiveMask()).toBe(false);
+
+            maskManager.revealMask(layerMaskMock);
+            expect(maskManager.hasActiveMask()).toBe(true);
+
+            maskManager.hideActiveMask();
+            expect(maskManager.hasActiveMask()).toBe(false);
         });
 
     });
