@@ -10,26 +10,18 @@ describe('ClientRect', () => {
 
     it('should check consistency of boundary', () => {
         // Imaginary Canvas Size 50x50
-        const fn1 = () => new ClientRect(5, 15, 20, 50, 10, 30);
-        const fn2 = () => new ClientRect(0, 15, 20, 50, 10, 30);
-        const fn3 = () => new ClientRect(5, 0, 20, 50, 10, 30);
-        const fn4 = () => new ClientRect(5, 15, 0, 50, 10, 30);
-        const fn5 = () => new ClientRect(5, 15, 20, 0, 10, 30);
-        const fn6 = () => new ClientRect(5, 15, 20, 50, 0, 30);
-        const fn7 = () => new ClientRect(5, 15, 20, 50, 10, 0);
+        const fn1 = () => new ClientRect(5, 15, 20, 50);
+        const fn2 = () => new ClientRect(5, 0, 20, 50);
+        const fn3 = () => new ClientRect(5, 15, 20, 0);
 
         expect(fn1).not.toThrow();
         expect(fn2).toThrow();
         expect(fn3).toThrow();
-        expect(fn4).toThrow();
-        expect(fn5).toThrow();
-        expect(fn6).toThrow();
-        expect(fn7).toThrow();
     });
 
     it('.getVertexes(): should return all vertexes', () => {
-        const c1 = new ClientRect(10, 210, 15, 265, 200, 250);
-        const c2 = new ClientRect(20, 320, 25, 375, 300, 350);
+        const c1 = new ClientRect(10, 210, 15, 265);
+        const c2 = new ClientRect(20, 320, 25, 375);
 
         const result = ClientRect.getVertexes([c1, c2]);
 
@@ -39,8 +31,8 @@ describe('ClientRect', () => {
 
     it('.combine(): should combine multiple rectangles into big one', () => {
         // Imaginary Canvas Size 100x100
-        const c1 = new ClientRect(20, 50, 25, 65, 30, 40);
-        const c2 = new ClientRect(30, 40, 70, 90, 10, 20);
+        const c1 = new ClientRect(20, 50, 25, 65);
+        const c2 = new ClientRect(30, 40, 70, 90);
 
         const result = ClientRect.combine([c1, c2]);
         expect(result).toEqual(jasmine.any(ClientRect));
@@ -62,7 +54,7 @@ describe('ClientRect', () => {
             width = 5;
             height = 7;
 
-            clientRect = new ClientRect(left, left + width, top, top + height, width, height);
+            clientRect = new ClientRect(left, left + width, top, top + height);
         });
 
         it('should has properties', () => {

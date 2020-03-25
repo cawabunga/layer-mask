@@ -12,29 +12,21 @@ class ClientRect {
      * @param {number} right
      * @param {number} top
      * @param {number} bottom
-     * @param {number} width
-     * @param {number} height
      */
-    constructor(left, right, top, bottom, width, height) {
+    constructor(left, right, top, bottom) {
         if (left > right) {
             throw new TypeError('inconsistent rectangle: right value should be bigger than left value');
         }
         if (top > bottom) {
             throw new TypeError('inconsistent rectangle: bottom value should be bigger than top value');
         }
-        if (right - left !== width) {
-            throw new TypeError('inconsistent rectangle: invalid width value');
-        }
-        if (bottom - top !== height) {
-            throw new TypeError('inconsistent rectangle: invalid height value');
-        }
 
         this.left = left;
         this.right = right;
         this.top = top;
         this.bottom = bottom;
-        this.width = width;
-        this.height = height;
+        this.width = right - left;
+        this.height = bottom - top;
     }
 
     /**
@@ -43,8 +35,8 @@ class ClientRect {
      * @return {ClientRect}
      */
     static from(hostClientRect) {
-        const { left, right, top, bottom, width, height } = hostClientRect;
-        return new this(left, right, top, bottom, width, height)
+        const { left, right, top, bottom } = hostClientRect;
+        return new this(left, right, top, bottom)
     }
 
     /**
@@ -110,10 +102,7 @@ class ClientRect {
         const top = Math.min(...Y);
         const bottom = Math.max(...Y);
 
-        const width = right - left;
-        const height = bottom - top;
-
-        return new this(left, right, top, bottom, width, height);
+        return new this(left, right, top, bottom);
     }
 
 }
