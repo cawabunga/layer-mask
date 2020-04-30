@@ -1,18 +1,19 @@
-const _ = require('../utils/_');
-const Point = require('./Point');
+import { flatten } from '../utils/_';
+import { Point } from './Point';
+import { Vector } from './Vector';
 
 /**
- * @name ClientRect
  * @descr It is similar to an abstract Rectangle class, but with inverted Y axis
  */
-class ClientRect {
-    /**
-     * @param {number} left
-     * @param {number} right
-     * @param {number} top
-     * @param {number} bottom
-     */
-    constructor(left, right, top, bottom) {
+export class ClientRect {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+    width: number;
+    height: number;
+
+    constructor(left: number, right: number, top: number, bottom: number) {
         if (left > right) {
             throw new TypeError(
                 'inconsistent rectangle: right value should be bigger than left value',
@@ -32,22 +33,17 @@ class ClientRect {
         this.height = bottom - top;
     }
 
-    /**
-     * @static
-     * @param {Object.<top, left, bottom, right>} hostClientRect
-     * @return {ClientRect}
-     */
-    static from(hostClientRect) {
+    static from(hostClientRect: {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+    }): ClientRect {
         const { left, right, top, bottom } = hostClientRect;
         return new this(left, right, top, bottom);
     }
 
-    /**
-     * @public
-     * @param {Point} point
-     * @return {boolean}
-     */
-    isPointCollides(point) {
+    isPointCollides(point: Point): boolean {
         const left = this.left;
         const right = this.left + this.width;
         const top = this.top;
@@ -60,12 +56,7 @@ class ClientRect {
         );
     }
 
-    /**
-     * @public
-     * @param {Vector} vector
-     * @return {boolean}
-     */
-    isVectorCollides(vector) {
+    isVectorCollides(vector: Vector): boolean {
         return (
             this.isPointCollides(vector.initial) &&
             this.isPointCollides(vector.terminal) &&
@@ -73,11 +64,7 @@ class ClientRect {
         );
     }
 
-    /**
-     * @public
-     * @returns {Array.<Point>} Points are in the clockwise order
-     */
-    getVertexes() {
+    getVertexes(): Point[] {
         return [
             new Point(this.left, this.top),
             new Point(this.left + this.width, this.top),
@@ -86,22 +73,12 @@ class ClientRect {
         ];
     }
 
-    /**
-     * @static
-     * @param {Array.<ClientRect>} rectangles
-     * @return {Array.<Point>}
-     */
-    static getVertexes(rectangles) {
+    static getVertexes(rectangles: ClientRect[]): Point[] {
         const vertexes = rectangles.map((r) => r.getVertexes());
-        return _.flatten(vertexes);
+        return flatten(vertexes);
     }
 
-    /**
-     * @static
-     * @param {Array.<ClientRect>} rectangles
-     * @return {ClientRect}
-     */
-    static combine(rectangles) {
+    static combine(rectangles: ClientRect[]): ClientRect {
         const vertexes = this.getVertexes(rectangles);
 
         const X = vertexes.map((v) => v.x);
@@ -115,5 +92,3 @@ class ClientRect {
         return new this(left, right, top, bottom);
     }
 }
-
-module.exports = ClientRect;

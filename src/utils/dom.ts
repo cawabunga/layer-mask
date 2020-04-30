@@ -1,26 +1,11 @@
-const { ClientRect } = require('../dataTypes');
+import { ClientRect } from '../dataTypes/ClientRect';
 
-module.exports = {
-    getPageDimensions,
-    getWindowDimensions,
-    isElementFixed,
-    getAllBoundaries,
-    addPadding,
-    addPageOffset,
-    addClasses,
+export type Dimension = {
+    width: number;
+    height: number;
 };
 
-/**
- * @typedef {Object} Dimension
- *
- * @property {number} width
- * @property {number} height
- */
-
-/**
- * @return {Dimension}
- */
-function getPageDimensions() {
+export function getPageDimensions(): Dimension {
     const contentDimension = getContentDimensions();
     const windowDimension = getWindowDimensions();
 
@@ -30,10 +15,7 @@ function getPageDimensions() {
     };
 }
 
-/**
- * @return {Dimension}
- */
-function getContentDimensions() {
+function getContentDimensions(): Dimension {
     return {
         height: Math.max(
             document.body.scrollHeight,
@@ -46,50 +28,31 @@ function getContentDimensions() {
     };
 }
 
-/**
- * @return {Dimension}
- */
-function getWindowDimensions() {
+export function getWindowDimensions(): Dimension {
     return {
         height: document.documentElement.clientHeight,
         width: document.documentElement.clientWidth,
     };
 }
 
-/**
- * @return {Dimension}
- */
-function getScrollDimensions() {
+function getScrollDimensions(): Dimension {
     return {
         height: window.pageYOffset || window.scrollY,
         width: window.pageXOffset || window.scrollX,
     };
 }
 
-/**
- * @param {Element} element
- * @param {string} property
- * @return {string}
- */
-function css(element, property) {
+function css(element: HTMLElement, property: string): string {
     return window.getComputedStyle(element).getPropertyValue(property);
 }
 
-/**
- * @param {Element} element
- * @return {boolean}
- */
-function isElementFixed(element) {
+export function isElementFixed(element: HTMLElement): boolean {
     const parents = getParentElements(element);
     const elements = [element].concat(parents);
     return elements.some((element) => css(element, 'position') === 'fixed');
 }
 
-/**
- * @param {Element} element
- * @return {Array.<Element>}
- */
-function getParentElements(element) {
+function getParentElements(element: HTMLElement): HTMLElement[] {
     const parents = [];
 
     let child = element;
@@ -101,55 +64,39 @@ function getParentElements(element) {
     return parents;
 }
 
-/**
- * @param {Array.<Element>} elements
- * @return {Array.<ClientRect>}
- */
-function getAllBoundaries(elements) {
+export function getAllBoundaries(elements: HTMLElement[]): ClientRect[] {
     return elements.map((element) => {
         return ClientRect.from(element.getBoundingClientRect());
     });
 }
 
-/**
- * @param {ClientRect} rectangular
- * @param {number} padding
- * @return {ClientRect}
- */
-function addPadding(rectangular, padding) {
+export function addPadding(
+    rectangular: ClientRect,
+    padding: number,
+): ClientRect {
     const left = rectangular.left - padding;
     const right = rectangular.right + padding;
     const top = rectangular.top - padding;
     const bottom = rectangular.bottom + padding;
-    const width = rectangular.width + 2 * padding;
-    const height = rectangular.height + 2 * padding;
 
-    return new ClientRect(left, right, top, bottom, width, height);
+    return new ClientRect(left, right, top, bottom);
 }
 
-/**
- * @param {ClientRect} rectangular
- * @param {boolean} isFixed
- * @return {ClientRect}
- */
-function addPageOffset(rectangular, isFixed) {
+export function addPageOffset(
+    rectangular: ClientRect,
+    isFixed: boolean,
+): ClientRect {
     const scrollDimensions = getScrollDimensions();
 
     const left = rectangular.left + (isFixed ? 0 : scrollDimensions.width);
     const right = rectangular.right + (isFixed ? 0 : scrollDimensions.width);
     const top = rectangular.top + (isFixed ? 0 : scrollDimensions.height);
     const bottom = rectangular.bottom + (isFixed ? 0 : scrollDimensions.height);
-    const width = rectangular.width;
-    const height = rectangular.height;
 
-    return new ClientRect(left, right, top, bottom, width, height);
+    return new ClientRect(left, right, top, bottom);
 }
 
-/**
- * @param {Element} element
- * @param {string} classes
- */
-function addClasses(element, classes) {
+export function addClasses(element: HTMLElement, classes: string): void {
     const classArr = classes.split(' ');
     element.classList.add(...classArr);
 }

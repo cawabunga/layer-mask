@@ -1,33 +1,26 @@
-const _ = require('./utils/_');
-const debounce = require('lodash.debounce');
+import debounce from 'lodash/debounce';
+import { forEach } from './utils/_';
+import { LayerMask } from './LayerMask';
 
-class LayerMaskManager {
-    /**
-     * @param {Element} container
-     */
-    constructor(container) {
-        this._listeners = [];
+export class LayerMaskManager {
+    _listeners: (() => void)[] = [];
+    _container: HTMLElement;
+    activeMaskElementOptions: undefined | {};
+    currentLayerMask: undefined | LayerMask;
+    activeMaskElement: undefined | HTMLElement;
+
+    constructor(container: HTMLElement) {
         this._container = container;
         this.currentLayerMask = undefined;
         this.activeMaskElement = undefined;
         this.activeMaskElementOptions = undefined;
     }
 
-    /**
-     * @public
-     * @return {Boolean}
-     */
-    hasActiveMask() {
+    hasActiveMask(): boolean {
         return Boolean(this.currentLayerMask);
     }
 
-    /**
-     * @public
-     * @param {LayerMask} layerMask
-     * @param {Object} [maskElementOptions = {}]
-     * @return {Element}
-     */
-    revealMask(layerMask, maskElementOptions = {}) {
+    revealMask(layerMask: LayerMask, maskElementOptions: {} = {}): HTMLElement {
         if (this.activeMaskElement) {
             this.hideActiveMask();
         }
@@ -44,7 +37,6 @@ class LayerMaskManager {
     }
 
     /**
-     * @public
      * @throws {Error} Will throw an error if the mask element is not defined.
      */
     hideActiveMask() {
@@ -58,17 +50,16 @@ class LayerMaskManager {
 
         const parent = this.activeMaskElement.parentElement;
         if (parent) {
-            parent.removeChild(this.activeMaskElement)
+            parent.removeChild(this.activeMaskElement);
         }
         this.activeMaskElement = undefined;
         this.activeMaskElementOptions = undefined;
     }
 
     /**
-     * @public
      * @throws {Error} Will throw an error if the layer mask instance is not passed before.
      */
-    addElementsToMask(elements) {
+    addElementsToMask(elements: HTMLElement[]): void {
         if (!this.currentLayerMask) {
             throw new Error('layer mask is missing');
         }
@@ -78,10 +69,9 @@ class LayerMaskManager {
     }
 
     /**
-     * @public
      * @throws {Error} Will throw an error if the layer mask instance is not passed before.
      */
-    removeElementsFromMask(elements) {
+    removeElementsFromMask(elements: HTMLElement): void {
         if (!this.currentLayerMask) {
             throw new Error('layer mask is missing');
         }
@@ -96,11 +86,9 @@ class LayerMaskManager {
     }
 
     /**
-     * @public
      * @throws {Error} Will throw an error if the layer mask instance is not passed before.
-     * @return {Element}
      */
-    refreshMask() {
+    refreshMask(): HTMLElement {
         if (!this.currentLayerMask) {
             throw new Error('layer mask is missing');
         }
@@ -111,34 +99,30 @@ class LayerMaskManager {
         );
     }
 
-    /**
-     * @private
-     * @param {Element} maskElement
-     */
-    _setActiveMaskElement(maskElement) {
+    private _setActiveMaskElement(maskElement: HTMLElement) {
         this._container.appendChild(maskElement);
         this.activeMaskElement = maskElement;
     }
 
-    /**
-     * @private
-     * @param {Object} maskElementOptions
-     */
-    _setActiveMaskElementOptions(maskElementOptions) {
+    private _setActiveMaskElementOptions(maskElementOptions: {}) {
         this.activeMaskElementOptions = maskElementOptions;
 
-        _.forEach(maskElementOptions, (optionValue, optionKey) => {
-            this._applyOption(this.activeMaskElement, optionKey, optionValue);
+        forEach(maskElementOptions, (optionValue, optionKey) => {
+            if (this.activeMaskElement) {
+                this._applyOption(
+                    this.activeMaskElement,
+                    optionKey,
+                    optionValue,
+                );
+            }
         });
     }
 
-    /**
-     * @private
-     * @param {Element} maskElement
-     * @param {string} optionKey
-     * @param {*} optionValue
-     */
-    _applyOption(maskElement, optionKey, optionValue) {
+    private _applyOption(
+        maskElement: HTMLElement,
+        optionKey: string,
+        optionValue: any,
+    ): void {
         switch (optionKey) {
             case 'click':
                 maskElement.addEventListener('click', optionValue);
@@ -146,10 +130,7 @@ class LayerMaskManager {
         }
     }
 
-    /**
-     * @private
-     */
-    _startResizeListener() {
+    private _startResizeListener(): void {
         const handler = () => this.refreshMask();
         const debouncedHandler = debounce(handler, 150);
         window.addEventListener('resize', debouncedHandler, false);
@@ -159,14 +140,9 @@ class LayerMaskManager {
         this._listeners.push(detach);
     }
 
-    /**
-     * @private
-     */
-    _stopAllListeners() {
-        const invoke = (fn) => fn();
+    private _stopAllListeners() {
+        const invoke = (fn: () => void) => fn();
         this._listeners.forEach(invoke);
         this._listeners = [];
     }
 }
-
-module.exports = LayerMaskManager;

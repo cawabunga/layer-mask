@@ -1,26 +1,27 @@
-const _ = require('./utils/_');
-const domUtils = require('./utils/dom');
-const { Point, Vector, ClientRect } = require('./dataTypes');
+import { forEach, withoutSingle } from './utils/_';
+import * as domUtils from './utils/dom';
+import { Point, Vector, ClientRect } from './dataTypes/index';
+import type { Dimension } from './utils/dom';
 
-class LayerMask {
-    /**
-     * @typedef {Object} LayerMaskConfig
-     *
-     * @property {number} [padding]
-     * @property {boolean} [singular] say to build the only one hole in the mask that cover all target elements
-     * @property {string} [rootClass]
-     * @property {Array.<string>} [modifiers] modifiers that appended to root class. Predefined: "debug", "click-through" and "spotlight"
-     * @property {string} [classesTable]
-     * @property {string} [classesTableRow]
-     * @property {string} [classesTableCell]
-     * @property {string} [classesTableCellHole]
-     * @property {string} [classesDebug]
-     *
-     *
-     * @static
-     * @return {LayerMaskConfig}
-     */
-    static get defaults() {
+type LayerMaskConfig = {
+    padding: number;
+    singular: boolean; // say to build the only one hole in the mask that cover all target elements
+    rootClass: string;
+    modifiers: string[]; // modifiers that appended to root class. Predefined: "debug", "click-through" and "spotlight"
+    classesTable: string;
+    classesTableRow: string;
+    classesTableCell: string;
+    classesTableCellHole: string;
+    classesDebug?: string;
+};
+
+type ElementList = NodeList | HTMLElement | Element[];
+
+export class LayerMask {
+    elements: HTMLElement[];
+    private config: LayerMaskConfig;
+
+    static get defaults(): LayerMaskConfig {
         return {
             padding: 0,
             singular: false,
@@ -33,12 +34,11 @@ class LayerMask {
         };
     }
 
-    /**
-     * @param {NodeList|Element|Array.<Element>} elements
-     * @param {LayerMaskConfig} [config = {}]
-     */
-    constructor(elements, config = {}) {
-        this.config = Object.assign({}, this.constructor.defaults, config);
+    constructor(
+        elements: ElementList,
+        config: void | Partial<LayerMaskConfig> = {},
+    ) {
+        this.config = Object.assign({}, LayerMask.defaults, config);
         this.elements = [];
         this.addElements(elements);
     }
@@ -47,10 +47,13 @@ class LayerMask {
      * @public
      * @param {NodeList|Element|Array.<Element>} elements
      */
-    addElements(elements) {
-        const localElements = elements.length
-            ? [].slice.call(elements)
-            : [elements];
+    addElements(elements: ElementList): void {
+        let localElements;
+        if (elements instanceof HTMLElement) {
+            localElements = [elements];
+        } else {
+            localElements = [].slice.call(elements);
+        }
         this.elements = this.elements.concat(localElements);
     }
 
@@ -58,18 +61,17 @@ class LayerMask {
      * @public
      * @param {NodeList|Element|Array.<Element>} elements
      */
-    removeElements(elements) {
-        const localElements = elements.length
-            ? [].slice.call(elements)
-            : [elements];
-        this.elements = _.withoutSingle(this.elements, ...localElements);
+    removeElements(elements: ElementList) {
+        let localElements;
+        if (elements instanceof HTMLElement) {
+            localElements = [elements];
+        } else {
+            localElements = [].slice.call(elements);
+        }
+        this.elements = withoutSingle(this.elements, ...localElements);
     }
 
-    /**
-     * @public
-     * @return {Element}
-     */
-    createMask() {
+    createMask(): HTMLElement {
         const isFixed = domUtils.isElementFixed(this.elements[0]);
         const canvasDimension = isFixed
             ? domUtils.getWindowDimensions()
@@ -89,13 +91,7 @@ class LayerMask {
         return containerElement;
     }
 
-    /**
-     * @private
-     * @param {Dimension} canvasDimension
-     * @param {Boolean} isFixed
-     * @return {Element}
-     */
-    buildContainer(canvasDimension, isFixed) {
+    buildContainer(canvasDimension: Dimension, isFixed: boolean): HTMLElement {
         const container = document.createElement('div');
 
         container.style.width = `${canvasDimension.width}px`;
@@ -111,22 +107,12 @@ class LayerMask {
         return container;
     }
 
-    /**
-     * @private
-     * @param {string} modifier
-     * @return {string}
-     */
-    createModifierCssClass(modifier) {
+    private createModifierCssClass(modifier: string): string {
         return `${this.config.rootClass}--${modifier}`;
     }
 
-    /**
-     * @private
-     * @param {boolean} isFixed
-     * @return {Array.<string>}
-     */
-    getModifiers(isFixed) {
-        const modifiers = [].concat(this.config.modifiers);
+    private getModifiers(isFixed: boolean): string[] {
+        const modifiers = ([] as string[]).concat(this.config.modifiers);
 
         if (isFixed) {
             modifiers.push('fixed');
@@ -135,14 +121,11 @@ class LayerMask {
         return modifiers;
     }
 
-    /**
-     * @private
-     * @param {Element} container
-     * @param {Array.<ClientRect>} rectangles
-     * @param {Dimension} canvasDimension
-     * @return {Element}
-     */
-    appendMask(container, rectangles, canvasDimension) {
+    appendMask(
+        container: HTMLElement,
+        rectangles: ClientRect[],
+        canvasDimension: Dimension,
+    ): HTMLElement {
         domUtils.addClasses(container, this.config.classesTable);
 
         const p0 = new Point(0, 0);
@@ -159,7 +142,7 @@ class LayerMask {
 
         const rows = this.buildTable(rowsCount, colsCount);
 
-        _.forEach(rows, (rowEl, i) => {
+        forEach(rows, (rowEl, i) => {
             domUtils.addClasses(rowEl, this.config.classesTableRow);
 
             const rowInitial = rowPositions[i];
@@ -167,7 +150,7 @@ class LayerMask {
 
             rowEl.style.height = `${rowTerminal - rowInitial}px`;
 
-            _.forEach(rowEl.childNodes, (cellEl, j) => {
+            forEach(rowEl.childNodes, (cellEl, j) => {
                 domUtils.addClasses(cellEl, this.config.classesTableCell);
 
                 const colInitial = colPositions[j];
@@ -189,20 +172,14 @@ class LayerMask {
             });
         });
 
-        _.forEach(rows, (el, i) => {
+        forEach(rows, (el, i) => {
             container.appendChild(el);
         });
 
         return container;
     }
 
-    /**
-     * @private
-     * @param {number} rowsCount
-     * @param {number} colsCount
-     * @return {Array.<Element>}
-     */
-    buildTable(rowsCount, colsCount) {
+    private buildTable(rowsCount: number, colsCount: number): HTMLElement[] {
         const rows = [];
 
         for (let i = 0; i < rowsCount; i++) {
@@ -218,5 +195,3 @@ class LayerMask {
         return rows;
     }
 }
-
-module.exports = LayerMask;

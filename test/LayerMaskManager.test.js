@@ -1,5 +1,5 @@
 describe('LayerMaskManager', () => {
-    const LayerMaskManager = require('../src/LayerMaskManager');
+    const { LayerMaskManager } = require('../src/LayerMaskManager');
 
     it('should be a function', () => {
         expect(LayerMaskManager).toEqual(jasmine.any(Function));

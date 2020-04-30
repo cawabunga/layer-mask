@@ -1,5 +1,5 @@
 describe('LayerMask', () => {
-    const LayerMask = require('../src/LayerMask');
+    const { LayerMask } = require('../src/LayerMask');
 
     let body;
     beforeEach(() => {

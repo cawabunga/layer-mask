@@ -1,5 +1,5 @@
 describe('Point', () => {
-    const Point = require('../../src/dataTypes/Point');
+    const { Point } = require('../../src/dataTypes/Point');
 
     it('should be a function', () => {
         expect(Point).toEqual(jasmine.any(Function));

@@ -1,7 +1,7 @@
 describe('ClientRect', () => {
-    const ClientRect = require('../../src/dataTypes/ClientRect');
-    const Point = require('../../src/dataTypes/Point');
-    const Vector = require('../../src/dataTypes/Vector');
+    const { ClientRect } = require('../../src/dataTypes/ClientRect');
+    const { Point } = require('../../src/dataTypes/Point');
+    const { Vector } = require('../../src/dataTypes/Vector');
 
     it('should be a function', () => {
         expect(ClientRect).toEqual(jasmine.any(Function));

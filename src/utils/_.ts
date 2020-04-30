@@ -1,34 +1,18 @@
-module.exports = {
-    uniq,
-    flatten,
-    forEach,
-    withoutSingle,
-};
-
-/**
- * @param {Array} array
- * @return {Array}
- */
-function uniq(array) {
+export function uniq<T>(array: T[]): T[] {
     return array.reduce((memo, item) => {
         const includes = ~memo.indexOf(item);
         return includes ? memo : memo.concat(item);
-    }, []);
+    }, [] as T[]);
 }
 
-/**
- * @param {Array.<Array>} array
- * @return {Array}
- */
-function flatten(array) {
-    return [].concat(...array);
+export function flatten<T>(array: T[][]): T[] {
+    return array.flat();
 }
 
-/**
- * @param collection
- * @param {function} iteratee
- */
-function forEach(collection, iteratee) {
+export function forEach(
+    collection: any,
+    iteratee: (item: any, key: any, collection: any) => void,
+): void {
     if (collection.forEach) {
         collection.forEach(iteratee);
     } else if (typeof collection.length === 'number') {
@@ -43,11 +27,11 @@ function forEach(collection, iteratee) {
     }
 }
 
-function withoutIndex(arr, index) {
-    return [].concat(arr.slice(0, index), arr.slice(index + 1));
+function withoutIndex<T>(arr: T[], index: number): T[] {
+    return [...arr.slice(0, index), ...arr.slice(index + 1)];
 }
 
-function withoutSingle(arr, ...values) {
+export function withoutSingle<T>(arr: T[], ...values: T[]): T[] {
     return values.reduce((memo, value) => {
         const i = memo.indexOf(value);
         return ~i ? withoutIndex(memo, i) : memo;

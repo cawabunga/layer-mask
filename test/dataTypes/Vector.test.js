@@ -1,6 +1,6 @@
 describe('Vector', () => {
-    const Vector = require('../../src/dataTypes/Vector');
-    const Point = require('../../src/dataTypes/Point');
+    const { Vector } = require('../../src/dataTypes/Vector');
+    const { Point } = require('../../src/dataTypes/Point');
 
     it('should be a function', () => {
         expect(Vector).toEqual(jasmine.any(Function));
