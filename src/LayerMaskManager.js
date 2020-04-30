@@ -56,7 +56,10 @@ class LayerMaskManager {
 
         this.currentLayerMask = undefined;
 
-        this.activeMaskElement.remove();
+        const parent = this.activeMaskElement.parentElement;
+        if (parent) {
+            parent.removeChild(this.activeMaskElement)
+        }
         this.activeMaskElement = undefined;
         this.activeMaskElementOptions = undefined;
     }
