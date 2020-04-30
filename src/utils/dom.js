@@ -35,8 +35,14 @@ function getPageDimensions() {
  */
 function getContentDimensions() {
     return {
-        height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
-        width: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth)
+        height: Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+        ),
+        width: Math.max(
+            document.body.scrollWidth,
+            document.documentElement.scrollWidth,
+        ),
     };
 }
 
@@ -46,7 +52,7 @@ function getContentDimensions() {
 function getWindowDimensions() {
     return {
         height: document.documentElement.clientHeight,
-        width: document.documentElement.clientWidth
+        width: document.documentElement.clientWidth,
     };
 }
 
@@ -56,7 +62,7 @@ function getWindowDimensions() {
 function getScrollDimensions() {
     return {
         height: window.pageYOffset || window.scrollY,
-        width: window.pageXOffset || window.scrollX
+        width: window.pageXOffset || window.scrollX,
     };
 }
 
@@ -76,7 +82,7 @@ function css(element, property) {
 function isElementFixed(element) {
     const parents = getParentElements(element);
     const elements = [element].concat(parents);
-    return elements.some(element => css(element, 'position') === 'fixed');
+    return elements.some((element) => css(element, 'position') === 'fixed');
 }
 
 /**
@@ -100,7 +106,7 @@ function getParentElements(element) {
  * @return {Array.<ClientRect>}
  */
 function getAllBoundaries(elements) {
-    return elements.map(element => {
+    return elements.map((element) => {
         return ClientRect.from(element.getBoundingClientRect());
     });
 }

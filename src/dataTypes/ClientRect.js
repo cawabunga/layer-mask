@@ -6,7 +6,6 @@ const Point = require('./Point');
  * @descr It is similar to an abstract Rectangle class, but with inverted Y axis
  */
 class ClientRect {
-
     /**
      * @param {number} left
      * @param {number} right
@@ -15,10 +14,14 @@ class ClientRect {
      */
     constructor(left, right, top, bottom) {
         if (left > right) {
-            throw new TypeError('inconsistent rectangle: right value should be bigger than left value');
+            throw new TypeError(
+                'inconsistent rectangle: right value should be bigger than left value',
+            );
         }
         if (top > bottom) {
-            throw new TypeError('inconsistent rectangle: bottom value should be bigger than top value');
+            throw new TypeError(
+                'inconsistent rectangle: bottom value should be bigger than top value',
+            );
         }
 
         this.left = left;
@@ -36,7 +39,7 @@ class ClientRect {
      */
     static from(hostClientRect) {
         const { left, right, top, bottom } = hostClientRect;
-        return new this(left, right, top, bottom)
+        return new this(left, right, top, bottom);
     }
 
     /**
@@ -49,7 +52,12 @@ class ClientRect {
         const right = this.left + this.width;
         const top = this.top;
         const bottom = this.top + this.height;
-        return left <= point.x && point.x <= right && top <= point.y && point.y <= bottom;
+        return (
+            left <= point.x &&
+            point.x <= right &&
+            top <= point.y &&
+            point.y <= bottom
+        );
     }
 
     /**
@@ -58,9 +66,11 @@ class ClientRect {
      * @return {boolean}
      */
     isVectorCollides(vector) {
-        return this.isPointCollides(vector.initial)
-            && this.isPointCollides(vector.terminal)
-            && this.isPointCollides(vector.getMiddlePoint());
+        return (
+            this.isPointCollides(vector.initial) &&
+            this.isPointCollides(vector.terminal) &&
+            this.isPointCollides(vector.getMiddlePoint())
+        );
     }
 
     /**
@@ -82,7 +92,7 @@ class ClientRect {
      * @return {Array.<Point>}
      */
     static getVertexes(rectangles) {
-        const vertexes = rectangles.map(r => r.getVertexes());
+        const vertexes = rectangles.map((r) => r.getVertexes());
         return _.flatten(vertexes);
     }
 
@@ -94,8 +104,8 @@ class ClientRect {
     static combine(rectangles) {
         const vertexes = this.getVertexes(rectangles);
 
-        const X = vertexes.map(v => v.x);
-        const Y = vertexes.map(v => v.y);
+        const X = vertexes.map((v) => v.x);
+        const Y = vertexes.map((v) => v.y);
 
         const left = Math.min(...X);
         const right = Math.max(...X);
@@ -104,7 +114,6 @@ class ClientRect {
 
         return new this(left, right, top, bottom);
     }
-
 }
 
 module.exports = ClientRect;

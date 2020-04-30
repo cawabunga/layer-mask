@@ -1,4 +1,3 @@
-
 describe('ClientRect', () => {
     const ClientRect = require('../../src/dataTypes/ClientRect');
     const Point = require('../../src/dataTypes/Point');
@@ -46,7 +45,6 @@ describe('ClientRect', () => {
     });
 
     describe('instance', () => {
-
         let clientRect, left, width, top, height;
         beforeEach(() => {
             top = 20;
@@ -108,11 +106,18 @@ describe('ClientRect', () => {
             expect(vertexes).toEqual(jasmine.any(Array));
             expect(vertexes.length).toEqual(4);
 
-            expect(vertexes[0]).toEqual(jasmine.objectContaining({ x: 10, y: 20 }));
-            expect(vertexes[1]).toEqual(jasmine.objectContaining({ x: 15, y: 20 }));
-            expect(vertexes[2]).toEqual(jasmine.objectContaining({ x: 15, y: 27 }));
-            expect(vertexes[3]).toEqual(jasmine.objectContaining({ x: 10, y: 27 }));
+            expect(vertexes[0]).toEqual(
+                jasmine.objectContaining({ x: 10, y: 20 }),
+            );
+            expect(vertexes[1]).toEqual(
+                jasmine.objectContaining({ x: 15, y: 20 }),
+            );
+            expect(vertexes[2]).toEqual(
+                jasmine.objectContaining({ x: 15, y: 27 }),
+            );
+            expect(vertexes[3]).toEqual(
+                jasmine.objectContaining({ x: 10, y: 27 }),
+            );
         });
-
     });
 });

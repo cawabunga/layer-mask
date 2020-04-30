@@ -1,4 +1,3 @@
-
 describe('Point', () => {
     const Point = require('../../src/dataTypes/Point');
 

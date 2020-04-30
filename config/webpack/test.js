@@ -15,13 +15,13 @@ module.exports = merge(sharedConfig, {
                 query: {
                     presets: ['es2015'],
                     cacheDirectory: true,
-                }
+                },
             },
             {
                 test: /\.js$/,
                 include: /src/,
                 loader: 'istanbul-instrumenter-loader',
             },
-        ]
-    }
+        ],
+    },
 });

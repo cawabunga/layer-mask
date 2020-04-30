@@ -4,7 +4,6 @@ const _ = require('../utils/_');
  * @name Point
  */
 class Point {
-
     /**
      * @param {number} x
      * @param {number} y
@@ -20,7 +19,7 @@ class Point {
      * @returns {Array.<number>}
      */
     static mapX(points) {
-        const positions = points.map(p => p.x);
+        const positions = points.map((p) => p.x);
         return _.uniq(positions).sort((a, b) => a - b);
     }
 
@@ -30,7 +29,7 @@ class Point {
      * @returns {Array.<number>}
      */
     static mapY(points) {
-        const positions = points.map(p => p.y);
+        const positions = points.map((p) => p.y);
         return _.uniq(positions).sort((a, b) => a - b);
     }
 }

@@ -1,4 +1,3 @@
-
 describe('Vector', () => {
     const Vector = require('../../src/dataTypes/Vector');
     const Point = require('../../src/dataTypes/Point');
@@ -8,7 +7,6 @@ describe('Vector', () => {
     });
 
     describe('instance', () => {
-
         let vector, p1, p2;
         beforeEach(() => {
             p1 = new Point(10, 30);
@@ -28,7 +26,5 @@ describe('Vector', () => {
             expect(point.x).toEqual(12);
             expect(point.y).toEqual(23);
         });
-
     });
-
 });

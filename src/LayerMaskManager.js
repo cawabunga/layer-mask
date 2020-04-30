@@ -2,7 +2,6 @@ const _ = require('./utils/_');
 const debounce = require('lodash.debounce');
 
 class LayerMaskManager {
-
     /**
      * @param {Element} container
      */
@@ -103,7 +102,10 @@ class LayerMaskManager {
             throw new Error('layer mask is missing');
         }
 
-        return this.revealMask(this.currentLayerMask, this.activeMaskElementOptions);
+        return this.revealMask(
+            this.currentLayerMask,
+            this.activeMaskElementOptions,
+        );
     }
 
     /**
@@ -162,7 +164,6 @@ class LayerMaskManager {
         this._listeners.forEach(invoke);
         this._listeners = [];
     }
-
 }
 
 module.exports = LayerMaskManager;

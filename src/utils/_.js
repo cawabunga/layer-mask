@@ -31,12 +31,10 @@ function flatten(array) {
 function forEach(collection, iteratee) {
     if (collection.forEach) {
         collection.forEach(iteratee);
-
     } else if (typeof collection.length === 'number') {
         for (let i = 0; i < collection.length; i++) {
             iteratee(collection[i], i, collection);
         }
-
     } else {
         for (let keys = Object.keys(collection), i = 0; i < keys.length; i++) {
             const key = keys[i];

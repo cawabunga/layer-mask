@@ -3,7 +3,6 @@ const domUtils = require('./utils/dom');
 const { Point, Vector, ClientRect } = require('./dataTypes');
 
 class LayerMask {
-
     /**
      * @typedef {Object} LayerMaskConfig
      *
@@ -49,7 +48,9 @@ class LayerMask {
      * @param {NodeList|Element|Array.<Element>} elements
      */
     addElements(elements) {
-        const localElements = elements.length ? [].slice.call(elements) : [elements];
+        const localElements = elements.length
+            ? [].slice.call(elements)
+            : [elements];
         this.elements = this.elements.concat(localElements);
     }
 
@@ -58,7 +59,9 @@ class LayerMask {
      * @param {NodeList|Element|Array.<Element>} elements
      */
     removeElements(elements) {
-        const localElements = elements.length ? [].slice.call(elements) : [elements];
+        const localElements = elements.length
+            ? [].slice.call(elements)
+            : [elements];
         this.elements = _.withoutSingle(this.elements, ...localElements);
     }
 
@@ -68,12 +71,17 @@ class LayerMask {
      */
     createMask() {
         const isFixed = domUtils.isElementFixed(this.elements[0]);
-        const canvasDimension = isFixed ? domUtils.getWindowDimensions() : domUtils.getPageDimensions();
+        const canvasDimension = isFixed
+            ? domUtils.getWindowDimensions()
+            : domUtils.getPageDimensions();
 
         const sourceRectangles = domUtils.getAllBoundaries(this.elements);
-        const rectangles = (!this.config.singular ? sourceRectangles : [ClientRect.combine(sourceRectangles)])
-            .map(rect => domUtils.addPadding(rect, this.config.padding))
-            .map(rect => domUtils.addPageOffset(rect, isFixed));
+        const rectangles = (!this.config.singular
+            ? sourceRectangles
+            : [ClientRect.combine(sourceRectangles)]
+        )
+            .map((rect) => domUtils.addPadding(rect, this.config.padding))
+            .map((rect) => domUtils.addPageOffset(rect, isFixed));
 
         const containerElement = this.buildContainer(canvasDimension, isFixed);
         this.appendMask(containerElement, rectangles, canvasDimension);
@@ -95,7 +103,7 @@ class LayerMask {
 
         domUtils.addClasses(container, this.config.rootClass);
 
-        this.getModifiers(isFixed).forEach(modifier => {
+        this.getModifiers(isFixed).forEach((modifier) => {
             const cssClass = this.createModifierCssClass(modifier);
             domUtils.addClasses(container, cssClass);
         });
@@ -111,7 +119,6 @@ class LayerMask {
     createModifierCssClass(modifier) {
         return `${this.config.rootClass}--${modifier}`;
     }
-
 
     /**
      * @private
@@ -144,8 +151,8 @@ class LayerMask {
         const vertexes = ClientRect.getVertexes(rectangles);
         const points = [p0, pN].concat(...vertexes);
 
-        const colPositions = Point.mapX(points).filter(number => number >= 0 );
-        const rowPositions = Point.mapY(points).filter(number => number >= 0 );
+        const colPositions = Point.mapX(points).filter((number) => number >= 0);
+        const rowPositions = Point.mapY(points).filter((number) => number >= 0);
 
         const rowsCount = rowPositions.length - 1;
         const colsCount = colPositions.length - 1;
@@ -173,8 +180,11 @@ class LayerMask {
                 const terminalPoint = new Point(colTerminal, rowTerminal);
                 const vector = new Vector(initialPoint, terminalPoint);
 
-                if (rectangles.some(r => r.isVectorCollides(vector))) {
-                    domUtils.addClasses(cellEl, this.config.classesTableCellHole);
+                if (rectangles.some((r) => r.isVectorCollides(vector))) {
+                    domUtils.addClasses(
+                        cellEl,
+                        this.config.classesTableCellHole,
+                    );
                 }
             });
         });
@@ -207,7 +217,6 @@ class LayerMask {
 
         return rows;
     }
-
 }
 
 module.exports = LayerMask;

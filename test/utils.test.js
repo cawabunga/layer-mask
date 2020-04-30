@@ -2,18 +2,19 @@ describe('utils', () => {
     const utils = require('../src/utils/dom');
 
     it('should be an object', () => {
-        expect(utils).toEqual(jasmine.objectContaining({
-            getPageDimensions:   jasmine.any(Function),
-            getWindowDimensions: jasmine.any(Function),
-            isElementFixed:      jasmine.any(Function),
-            getAllBoundaries:    jasmine.any(Function),
-            addPadding:          jasmine.any(Function),
-            addPageOffset:       jasmine.any(Function),
-        }));
+        expect(utils).toEqual(
+            jasmine.objectContaining({
+                getPageDimensions: jasmine.any(Function),
+                getWindowDimensions: jasmine.any(Function),
+                isElementFixed: jasmine.any(Function),
+                getAllBoundaries: jasmine.any(Function),
+                addPadding: jasmine.any(Function),
+                addPageOffset: jasmine.any(Function),
+            }),
+        );
     });
 
     describe('isElementFixed()', () => {
-
         let styleElement, element;
 
         beforeAll(() => {
@@ -77,5 +78,4 @@ describe('utils', () => {
             expect(utils.isElementFixed(element)).toBe(true);
         });
     });
-
 });

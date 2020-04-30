@@ -4,7 +4,6 @@ const Point = require('./Point');
  * @name Vector
  */
 class Vector {
-
     /**
      * @param {Point} point1
      * @param {Point} point2

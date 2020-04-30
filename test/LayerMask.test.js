@@ -15,9 +15,15 @@ describe('LayerMask', () => {
         expect(LayerMask.defaults.rootClass).toEqual('layer-mask');
         expect(LayerMask.defaults.modifiers).toEqual([]);
         expect(LayerMask.defaults.classesTable).toEqual('layer-mask-table');
-        expect(LayerMask.defaults.classesTableRow).toEqual('layer-mask-table__row');
-        expect(LayerMask.defaults.classesTableCell).toEqual('layer-mask-table__cell');
-        expect(LayerMask.defaults.classesTableCellHole).toEqual('layer-mask-table__cell--hole');
+        expect(LayerMask.defaults.classesTableRow).toEqual(
+            'layer-mask-table__row',
+        );
+        expect(LayerMask.defaults.classesTableCell).toEqual(
+            'layer-mask-table__cell',
+        );
+        expect(LayerMask.defaults.classesTableCellHole).toEqual(
+            'layer-mask-table__cell--hole',
+        );
     });
 
     describe('instance', () => {
@@ -53,7 +59,9 @@ describe('LayerMask', () => {
             layerMask.config.modifiers.push('my-modifier');
             const maskEl = layerMask.createMask();
 
-            expect(maskEl.classList.contains('layer-mask--my-modifier')).toBe(true);
+            expect(maskEl.classList.contains('layer-mask--my-modifier')).toBe(
+                true,
+            );
         });
 
         it('should add elements to array', () => {
@@ -72,7 +80,6 @@ describe('LayerMask', () => {
         });
 
         describe('#createMask():', () => {
-
             let container;
 
             beforeEach(() => {
@@ -91,7 +98,9 @@ describe('LayerMask', () => {
 
             it('should add css classes to the container', () => {
                 expect(container.classList.contains('layer-mask')).toBe(true);
-                expect(container.classList.contains('layer-mask-table')).toBe(true);
+                expect(container.classList.contains('layer-mask-table')).toBe(
+                    true,
+                );
             });
 
             it('should split up a page into rows', () => {
@@ -107,8 +116,12 @@ describe('LayerMask', () => {
                 const row = container.children[0];
                 const cell = row.children[0];
 
-                expect(row.classList.contains('layer-mask-table__row')).toBe(true);
-                expect(cell.classList.contains('layer-mask-table__cell')).toBe(true);
+                expect(row.classList.contains('layer-mask-table__row')).toBe(
+                    true,
+                );
+                expect(cell.classList.contains('layer-mask-table__cell')).toBe(
+                    true,
+                );
             });
 
             it('there should be a cell that covers the target element', () => {
@@ -127,13 +140,13 @@ describe('LayerMask', () => {
                 const row = container.children[1];
                 const cell = row.children[1];
 
-                expect(cell.classList.contains('layer-mask-table__cell--hole')).toBe(true);
+                expect(
+                    cell.classList.contains('layer-mask-table__cell--hole'),
+                ).toBe(true);
             });
-
         });
 
         describe('#createMask(): fixed element', () => {
-
             let container;
 
             beforeEach(() => {
@@ -148,7 +161,9 @@ describe('LayerMask', () => {
             });
 
             it('should add css classes to the container', () => {
-                expect(container.classList.contains('layer-mask--fixed')).toBe(true);
+                expect(container.classList.contains('layer-mask--fixed')).toBe(
+                    true,
+                );
             });
 
             it('there should be a cell that covers the target element', () => {
@@ -163,11 +178,9 @@ describe('LayerMask', () => {
                 expect(clientRect0.width).toEqual(clientRect.width);
                 expect(clientRect0.height).toEqual(clientRect.height);
             });
-
         });
 
         describe('#createMask(): singular', () => {
-
             let maskEl, targetElement2;
 
             beforeEach(() => {
@@ -188,7 +201,9 @@ describe('LayerMask', () => {
                 targetElement2.style.width = '120px';
                 targetElement2.style.height = '40px';
 
-                layerMask = new LayerMask([targetElement, targetElement2], { singular: true });
+                layerMask = new LayerMask([targetElement, targetElement2], {
+                    singular: true,
+                });
                 maskEl = layerMask.createMask();
 
                 body.appendChild(maskEl);
@@ -203,13 +218,16 @@ describe('LayerMask', () => {
             });
 
             it('should has only single hole', () => {
-                const holeElements = maskEl.querySelectorAll('.layer-mask-table__cell--hole');
+                const holeElements = maskEl.querySelectorAll(
+                    '.layer-mask-table__cell--hole',
+                );
                 expect(holeElements.length).toBe(1);
             });
 
-
             it('the hole should cover all target elements', () => {
-                const hole = maskEl.querySelector('.layer-mask-table__cell--hole');
+                const hole = maskEl.querySelector(
+                    '.layer-mask-table__cell--hole',
+                );
                 const offset = hole.getBoundingClientRect();
 
                 expect(offset.top).toEqual(50);
@@ -217,9 +235,6 @@ describe('LayerMask', () => {
                 expect(offset.width).toEqual(160);
                 expect(offset.height).toEqual(120);
             });
-
         });
-
     });
-
 });

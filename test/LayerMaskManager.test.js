@@ -1,4 +1,3 @@
-
 describe('LayerMaskManager', () => {
     const LayerMaskManager = require('../src/LayerMaskManager');
 
@@ -7,7 +6,6 @@ describe('LayerMaskManager', () => {
     });
 
     describe('instance', () => {
-
         let maskManager, container, layerMaskMock, layerMaskElement;
 
         beforeEach(() => {
@@ -16,7 +14,7 @@ describe('LayerMaskManager', () => {
 
             layerMaskElement = document.createElement('div');
             layerMaskMock = {
-                createMask: () => document.createElement('div')
+                createMask: () => document.createElement('div'),
             };
         });
 
@@ -32,16 +30,19 @@ describe('LayerMaskManager', () => {
         });
 
         describe('#revealMask():', () => {
-
             it('should return a just created mask element', () => {
-                spyOn(layerMaskMock, 'createMask').and.returnValue(layerMaskElement);
+                spyOn(layerMaskMock, 'createMask').and.returnValue(
+                    layerMaskElement,
+                );
                 const result = maskManager.revealMask(layerMaskMock);
 
                 expect(result).toBe(layerMaskElement);
             });
 
             it('should append a mask element to the container', () => {
-                spyOn(layerMaskMock, 'createMask').and.returnValue(layerMaskElement);
+                spyOn(layerMaskMock, 'createMask').and.returnValue(
+                    layerMaskElement,
+                );
                 maskManager.revealMask(layerMaskMock);
 
                 expect(container.contains(layerMaskElement)).toBe(true);
@@ -57,7 +58,6 @@ describe('LayerMaskManager', () => {
         });
 
         describe('#hideActiveMask():', () => {
-
             it('should throw when if hide invoked with missing mask element', () => {
                 const fn = () => maskManager.hideActiveMask();
                 expect(fn).toThrow();
@@ -70,11 +70,9 @@ describe('LayerMaskManager', () => {
                 maskManager.hideActiveMask();
                 expect(container.contains(maskElement)).toBe(false);
             });
-
         });
 
         describe('#refreshMask():', () => {
-
             it('should throw if refresh invoked before the mask was set', () => {
                 const fn = () => maskManager.refreshMask();
                 expect(fn).toThrow();
@@ -83,7 +81,9 @@ describe('LayerMaskManager', () => {
             it('should return a just created mask element', () => {
                 maskManager.revealMask(layerMaskMock);
 
-                spyOn(layerMaskMock, 'createMask').and.returnValue(layerMaskElement);
+                spyOn(layerMaskMock, 'createMask').and.returnValue(
+                    layerMaskElement,
+                );
                 const result = maskManager.refreshMask();
 
                 expect(result).toBe(layerMaskElement);
@@ -97,20 +97,19 @@ describe('LayerMaskManager', () => {
                 expect(container.contains(maskElement1)).toBe(false);
                 expect(container.contains(maskElement2)).toBe(true);
             });
-
         });
 
         describe('mask element options', () => {
-
             it('should attach click event handler', () => {
                 const spy = jasmine.createSpy('click');
-                const element = maskManager.revealMask(layerMaskMock, { click: spy });
+                const element = maskManager.revealMask(layerMaskMock, {
+                    click: spy,
+                });
 
                 expect(spy).not.toHaveBeenCalled();
                 element.click();
                 expect(spy).toHaveBeenCalled();
             });
-
         });
 
         it('#hasActiveMask(): should determine is there revealed mask', () => {
@@ -122,6 +121,5 @@ describe('LayerMaskManager', () => {
             maskManager.hideActiveMask();
             expect(maskManager.hasActiveMask()).toBe(false);
         });
-
     });
 });
