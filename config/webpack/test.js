@@ -3,7 +3,6 @@ const sharedConfig = require('./shared');
 
 module.exports = merge(sharedConfig, {
     // `entry` configured by karma
-
     module: {
         rules: [
             {
