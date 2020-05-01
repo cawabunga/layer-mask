@@ -27,9 +27,7 @@
     "url": "https://github.com/cawabunga/layer-mask/issues"
   },
   "homepage": "https://github.com/cawabunga/layer-mask#readme",
-  "dependencies": {
-    "lodash": "^4.17.15"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
@@ -43,12 +41,16 @@
     "karma-coverage": "2.0.2",
     "karma-jasmine": "3.1.1",
     "karma-webpack": "4.0.2",
+    "lodash": "^4.17.15",
     "prettier": "^2.0.5",
     "ts-loader": "^7.0.2",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-merge": "4.2.2"
+  },
+  "peerDependencies": {
+    "lodash": "^4.17.15"
   },
   "files": [
     "dist/*"

@@ -11,4 +11,12 @@ module.exports = merge(sharedConfig, {
         library: _.camelCase(pkg.name),
         libraryTarget: 'umd',
     },
+    externals: {
+        'lodash/debounce': {
+            commonjs: 'lodash/debounce',
+            commonjs2: 'lodash/debounce',
+            amd: 'lodash/debounce',
+            root: ['_', 'debounce'],
+        },
+    },
 });
