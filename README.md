@@ -14,20 +14,28 @@ Live demo:
 - [demo integration](https://cawabunga.github.io/layer-mask/tour.html) with [Shepherd](https://github.com/HubSpot/shepherd)
 
 Here are useful cases:
-- allow/disallow clicking the specific elements on the page (modifier: "click-through")
+- allow/disallow clicking particular elements on the page (modifier: "click-through")
 - creating a backdrop that highlights elements on the page (modifier: "spotlight")
 
-Some details about the library:
-- supports handling the fixed positioned elements
-- written using ES6 and CommonJS modules (published as UMD)
-- uses `display: table-*` rules by the default, but you can [override it](src/layer-mask.css)
+### Getting Started
 
-### Installation
-- `$ npm install layer-mask`
-- Then include JS (dist/layer-mask.js) and CSS (dist/layer-mask.css) to your application
+Install with NPM:
+```sh
+npm install layer-mask --save
+```
 
-### Documentation
-Please see the source code of [LayerMask](src/LayerMask.js) and [LayerMaskManager](src/LayerMaskManager.js).
+Install with Yarn:
+```sh
+yarn add layer-mask
+```
+
+Import into your project:
+```javascript
+import { LayerMask, LayerMaskManager } from 'layer-mask'; // ES Import
+// or
+const { LayerMask, LayerMaskManager } = require('layer-mask'); // CommonJS
+```
+There are also small helper CSS file needs to be included `layer-mask/dist/layer-mask.css` by whatever approach that fits to your project.
 
 ### Usage
 Direct usage:
@@ -57,7 +65,7 @@ maskElement.onclick = () => {
 ```
 
 ### Modifiers
-You add custom css classes to the mask element, simply pass `modifiers` configuration.
+You can add custom CSS classes to the mask element, simply provide a `modifiers` configuration.
 ```javascript
 const mask = new LayerMask(document.querySelectorAll('#dummy'), {
     modifiers: [
@@ -71,4 +79,5 @@ const maskEl = mask.createMask();
 ```
 
 ### Roadmap
-- release
+- Add flow typings
+- Release
