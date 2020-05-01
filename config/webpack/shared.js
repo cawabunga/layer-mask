@@ -5,7 +5,7 @@ module.exports = {
         [pkg.name]: `${__dirname}/../../src/index.ts`,
     },
     resolve: {
-        extensions: [".ts", ".js"],
+        extensions: ['.ts', '.js'],
     },
     module: {
         rules: [

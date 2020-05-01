@@ -4,6 +4,7 @@
   "description": "Mask elements on the page",
   "license": "MIT",
   "main": "dist/layer-mask.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "npm run karma:ci",
     "prepublishOnly": "npm run build",
