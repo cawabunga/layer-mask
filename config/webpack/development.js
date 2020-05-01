@@ -1,5 +1,7 @@
 const _ = require('lodash');
 const merge = require('webpack-merge');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin;
 
 const sharedConfig = require('./shared');
 const pkg = require('../../package.json');
@@ -11,4 +13,5 @@ module.exports = merge(sharedConfig, {
         library: _.camelCase(pkg.name),
         libraryTarget: 'umd',
     },
+    plugins: [new BundleAnalyzerPlugin()],
 });
