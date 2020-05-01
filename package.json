@@ -30,7 +30,10 @@
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
+    "@babel/preset-typescript": "^7.9.0",
     "@types/lodash": "^4.14.150",
     "babel-loader": "^8.1.0",
     "coveralls": "3.1.0",
@@ -43,8 +46,6 @@
     "karma-webpack": "4.0.2",
     "lodash": "^4.17.15",
     "prettier": "^2.0.5",
-    "ts-loader": "^7.0.2",
-    "typescript": "^3.8.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-merge": "4.2.2"
