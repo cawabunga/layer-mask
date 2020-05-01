@@ -61,7 +61,7 @@ export class LayerMask {
      * @public
      * @param {NodeList|Element|Array.<Element>} elements
      */
-    removeElements(elements: ElementList) {
+    removeElements(elements: ElementList): void {
         let localElements;
         if (elements instanceof HTMLElement) {
             localElements = [elements];
@@ -172,7 +172,7 @@ export class LayerMask {
             });
         });
 
-        forEach(rows, (el, i) => {
+        forEach(rows, (el) => {
             container.appendChild(el);
         });
 

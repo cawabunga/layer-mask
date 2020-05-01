@@ -10,7 +10,9 @@ export function flatten<T>(array: T[][]): T[] {
 }
 
 export function forEach(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     collection: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     iteratee: (item: any, key: any, collection: any) => void,
 ): void {
     if (collection.forEach) {

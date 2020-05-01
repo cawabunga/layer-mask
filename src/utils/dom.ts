@@ -5,16 +5,6 @@ export type Dimension = {
     height: number;
 };
 
-export function getPageDimensions(): Dimension {
-    const contentDimension = getContentDimensions();
-    const windowDimension = getWindowDimensions();
-
-    return {
-        height: Math.max(contentDimension.height, windowDimension.height),
-        width: Math.max(contentDimension.width, windowDimension.width),
-    };
-}
-
 function getContentDimensions(): Dimension {
     return {
         height: Math.max(
@@ -35,6 +25,16 @@ export function getWindowDimensions(): Dimension {
     };
 }
 
+export function getPageDimensions(): Dimension {
+    const contentDimension = getContentDimensions();
+    const windowDimension = getWindowDimensions();
+
+    return {
+        height: Math.max(contentDimension.height, windowDimension.height),
+        width: Math.max(contentDimension.width, windowDimension.width),
+    };
+}
+
 function getScrollDimensions(): Dimension {
     return {
         height: window.pageYOffset || window.scrollY,
@@ -44,12 +44,6 @@ function getScrollDimensions(): Dimension {
 
 function css(element: HTMLElement, property: string): string {
     return window.getComputedStyle(element).getPropertyValue(property);
-}
-
-export function isElementFixed(element: HTMLElement): boolean {
-    const parents = getParentElements(element);
-    const elements = [element].concat(parents);
-    return elements.some((element) => css(element, 'position') === 'fixed');
 }
 
 function getParentElements(element: HTMLElement): HTMLElement[] {
@@ -62,6 +56,12 @@ function getParentElements(element: HTMLElement): HTMLElement[] {
     }
 
     return parents;
+}
+
+export function isElementFixed(element: HTMLElement): boolean {
+    const parents = getParentElements(element);
+    const elements = [element].concat(parents);
+    return elements.some((element) => css(element, 'position') === 'fixed');
 }
 
 export function getAllBoundaries(elements: HTMLElement[]): ClientRect[] {
@@ -98,5 +98,6 @@ export function addPageOffset(
 
 export function addClasses(element: HTMLElement, classes: string): void {
     const classArr = classes.split(' ');
+    // eslint-disable-next-line prefer-spread
     element.classList.add.apply(element.classList, classArr);
 }

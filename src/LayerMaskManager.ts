@@ -39,7 +39,7 @@ export class LayerMaskManager {
     /**
      * @throws {Error} Will throw an error if the mask element is not defined.
      */
-    hideActiveMask() {
+    hideActiveMask(): void {
         if (!this.activeMaskElement) {
             throw new Error('mask element is missing');
         }
@@ -99,12 +99,12 @@ export class LayerMaskManager {
         );
     }
 
-    private _setActiveMaskElement(maskElement: HTMLElement) {
+    private _setActiveMaskElement(maskElement: HTMLElement): void {
         this._container.appendChild(maskElement);
         this.activeMaskElement = maskElement;
     }
 
-    private _setActiveMaskElementOptions(maskElementOptions: {}) {
+    private _setActiveMaskElementOptions(maskElementOptions: {}): void {
         this.activeMaskElementOptions = maskElementOptions;
 
         forEach(maskElementOptions, (optionValue, optionKey) => {
@@ -121,6 +121,7 @@ export class LayerMaskManager {
     private _applyOption(
         maskElement: HTMLElement,
         optionKey: string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         optionValue: any,
     ): void {
         switch (optionKey) {
@@ -131,17 +132,19 @@ export class LayerMaskManager {
     }
 
     private _startResizeListener(): void {
-        const handler = () => this.refreshMask();
+        const handler = (): void => {
+            this.refreshMask();
+        };
         const debouncedHandler = debounce(handler, 150);
         window.addEventListener('resize', debouncedHandler, false);
-        const detach = () => {
+        const detach = (): void => {
             window.removeEventListener('resize', debouncedHandler, false);
         };
         this._listeners.push(detach);
     }
 
-    private _stopAllListeners() {
-        const invoke = (fn: () => void) => fn();
+    private _stopAllListeners(): void {
+        const invoke = (fn: () => void): void => fn();
         this._listeners.forEach(invoke);
         this._listeners = [];
     }
