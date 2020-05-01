@@ -2,4 +2,4 @@
 
 npm run build
 rm -rf docs/lib/*
-cp dist/* docs/lib
+cp -r dist/* docs/lib
