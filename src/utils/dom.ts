@@ -37,8 +37,8 @@ export function getPageDimensions(): Dimension {
 
 function getScrollDimensions(): Dimension {
     return {
-        height: window.pageYOffset || window.scrollY,
-        width: window.pageXOffset || window.scrollX,
+        height: window.pageYOffset,
+        width: window.pageXOffset,
     };
 }
 

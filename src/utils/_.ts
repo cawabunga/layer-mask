@@ -39,3 +39,20 @@ export function withoutSingle<T>(arr: T[], values: T[]): T[] {
         return ~i ? withoutIndex(memo, i) : memo;
     }, arr);
 }
+
+/**
+ * @descr Similar to Object.assign but only for plain objects
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function assign<T extends {}>(dest: T, s1: T, s2?: T, s3?: T): T {
+    // eslint-disable-next-line prefer-rest-params
+    const sources = [].slice.call(arguments, 1) as T[];
+    sources.forEach((source) => {
+        for (const key in source) {
+            if (source.hasOwnProperty(key)) {
+                dest[key] = source[key];
+            }
+        }
+    });
+    return dest;
+}

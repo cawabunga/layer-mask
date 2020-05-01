@@ -1,7 +1,7 @@
-import { forEach, withoutSingle } from './utils/_';
-import * as domUtils from './utils/dom';
-import { Point, Vector, ClientRect } from './dataTypes/index';
+import { assign, forEach, withoutSingle } from './utils/_';
 import type { Dimension } from './utils/dom';
+import * as domUtils from './utils/dom';
+import { ClientRect, Point, Vector } from './dataTypes/index';
 
 type LayerMaskConfig = {
     padding: number;
@@ -34,11 +34,8 @@ export class LayerMask {
         };
     }
 
-    constructor(
-        elements: ElementList,
-        config: void | Partial<LayerMaskConfig> = {},
-    ) {
-        this.config = Object.assign({}, LayerMask.defaults, config);
+    constructor(elements: ElementList, config: Partial<LayerMaskConfig> = {}) {
+        this.config = assign({}, LayerMask.defaults, config) as LayerMaskConfig;
         this.elements = [];
         this.addElements(elements);
     }

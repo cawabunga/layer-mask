@@ -19,4 +19,15 @@ describe('utils', () => {
         expect(result).not.toBe(arr);
         expect(result).toEqual([1, 2, 3]);
     });
+
+    it('#assign(): should be similar to Object.assign', () => {
+        const obj = {};
+        const obj1 = { a: 1 };
+        const obj2 = { a: 2 };
+
+        expect(_.assign(obj, obj1, obj2)).toEqual(
+            Object.assign({}, obj, obj1, obj2),
+        );
+        expect(obj).toEqual(Object.assign({}, obj, obj1, obj2));
+    });
 });
