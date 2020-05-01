@@ -14,7 +14,7 @@ describe('utils', () => {
 
     it('#withoutSingle(): should remove first occurrence of the element', () => {
         const arr = [1, 1, 2, 3];
-        const result = _.withoutSingle(arr, 1);
+        const result = _.withoutSingle(arr, [1]);
 
         expect(result).not.toBe(arr);
         expect(result).toEqual([1, 2, 3]);

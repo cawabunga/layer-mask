@@ -84,10 +84,10 @@ export class ClientRect {
         const X = vertexes.map((v) => v.x);
         const Y = vertexes.map((v) => v.y);
 
-        const left = Math.min(...X);
-        const right = Math.max(...X);
-        const top = Math.min(...Y);
-        const bottom = Math.max(...Y);
+        const left = Math.min.apply(null, X);
+        const right = Math.max.apply(null, X);
+        const top = Math.min.apply(null, Y);
+        const bottom = Math.max.apply(null, Y);
 
         return new this(left, right, top, bottom);
     }

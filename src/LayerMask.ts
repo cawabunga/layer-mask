@@ -68,7 +68,7 @@ export class LayerMask {
         } else {
             localElements = [].slice.call(elements);
         }
-        this.elements = withoutSingle(this.elements, ...localElements);
+        this.elements = withoutSingle(this.elements, localElements);
     }
 
     createMask(): HTMLElement {
@@ -132,7 +132,7 @@ export class LayerMask {
         const pN = new Point(canvasDimension.width, canvasDimension.height);
 
         const vertexes = ClientRect.getVertexes(rectangles);
-        const points = [p0, pN].concat(...vertexes);
+        const points = [p0, pN].concat(vertexes);
 
         const colPositions = Point.mapX(points).filter((number) => number >= 0);
         const rowPositions = Point.mapY(points).filter((number) => number >= 0);

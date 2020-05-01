@@ -98,5 +98,5 @@ export function addPageOffset(
 
 export function addClasses(element: HTMLElement, classes: string): void {
     const classArr = classes.split(' ');
-    element.classList.add(...classArr);
+    element.classList.add.apply(element.classList, classArr);
 }

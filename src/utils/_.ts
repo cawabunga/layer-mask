@@ -28,10 +28,10 @@ export function forEach(
 }
 
 function withoutIndex<T>(arr: T[], index: number): T[] {
-    return [...arr.slice(0, index), ...arr.slice(index + 1)];
+    return ([] as T[]).concat(arr.slice(0, index), arr.slice(index + 1));
 }
 
-export function withoutSingle<T>(arr: T[], ...values: T[]): T[] {
+export function withoutSingle<T>(arr: T[], values: T[]): T[] {
     return values.reduce((memo, value) => {
         const i = memo.indexOf(value);
         return ~i ? withoutIndex(memo, i) : memo;
