@@ -1,6 +1,7 @@
 const pkg = require('../../package.json');
 
 module.exports = {
+    target: 'web',
     entry: {
         [pkg.name]: `${__dirname}/../../src/index.ts`,
     },
