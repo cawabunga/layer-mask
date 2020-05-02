@@ -11,11 +11,12 @@
     "prebuild": "npm test",
     "build": "./bin/build-lib.sh",
     "preserve": "rm -rf serve",
-    "serve": "./node_modules/.bin/webpack --watch",
-    "karma:tdd": "NODE_ENV=test ./node_modules/.bin/karma start ./karma.config.js",
-    "karma:ci": "NODE_ENV=test ./node_modules/.bin/karma start ./karma.config.js --single-run",
-    "coveralls": "cat ./tmp/coverage/report-lcov/lcov.info | ./node_modules/.bin/coveralls",
-    "build:docs": "./bin/build-docs.sh"
+    "serve": "yarn webpack --watch",
+    "karma:tdd": "NODE_ENV=test yarn karma start ./karma.config.js",
+    "karma:ci": "NODE_ENV=test yarn karma start ./karma.config.js --single-run",
+    "coveralls": "cat ./tmp/coverage/report-lcov/lcov.info | yarn coveralls",
+    "build:docs": "./bin/build-docs.sh",
+    "build:types": "yarn tsc --declaration src/index.ts --target ES2015 --allowSyntheticDefaultImports --lib dom,es2019 --declarationDir dist --declarationMap --emitDeclarationOnly"
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,7 @@
     "karma-webpack": "4.0.2",
     "lodash": "^4.17.15",
     "prettier": "^2.0.5",
+    "tsc": "^1.20150623.0",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.7.0",
