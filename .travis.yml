@@ -4,14 +4,14 @@ node_js:
   - "12"
 
 install:
-  - "npm install"
+  - "yarn"
 
 sudo: required # https://github.com/travis-ci/travis-ci/issues/8836
 
 addons:
   chrome: stable
 
-after_success: 'npm run coveralls'
+after_success: 'yarn run coverage'
 
 services:
   - xvfb

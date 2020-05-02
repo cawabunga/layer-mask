@@ -14,7 +14,7 @@
     "serve": "yarn webpack --watch",
     "karma:tdd": "NODE_ENV=test yarn karma start ./karma.config.js",
     "karma:ci": "NODE_ENV=test yarn karma start ./karma.config.js --single-run",
-    "coveralls": "cat ./tmp/coverage/report-lcov/lcov.info | yarn coveralls",
+    "coverage": "cat ./tmp/coverage/report-lcov/lcov.info | yarn coveralls",
     "build:docs": "./bin/build-docs.sh",
     "build:types": "yarn tsc --declaration src/index.ts --target ES2015 --allowSyntheticDefaultImports --lib dom,es2019 --declarationDir dist --declarationMap --emitDeclarationOnly"
   },
